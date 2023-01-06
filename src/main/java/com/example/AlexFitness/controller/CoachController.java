@@ -24,4 +24,9 @@ public class CoachController {
     public Optional<Coach> getCoach(@PathVariable Integer id) {
         return coachService.getCoach(id);
     }
+
+    @GetMapping("/getCoach/{name}")
+    public Coach findByName(@PathVariable String name) {
+        return coachService.findByName(name);
+    }
 }

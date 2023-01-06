@@ -21,4 +21,15 @@ public class VisitorController {
     public Optional<Visitor> getVisitor(@PathVariable Integer id) {
         return visitorService.getVisitor(id);
     }
+
+    @GetMapping("/findByPhone/{phone}")
+    public Visitor findByNumberPhone(@PathVariable String phone) {
+        return visitorService.findByPhoneNumber(phone);
+    }
+
+    @PostMapping("/registerVisitor/{visitor}")
+    public void registerVisitor(@PathVariable Visitor visitor) {
+        visitorService.registerVisitor(visitor);
+    }
+
 }
