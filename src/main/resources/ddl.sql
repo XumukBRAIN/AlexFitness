@@ -2,15 +2,18 @@ CREATE TABLE visitor(
     id serial,
     name varchar,
     phone_number varchar,
-    coach_id int references coach(id),
+    coach int references coach(id),
+    subscription_id integer references subscription(id),
     PRIMARY KEY (id)
 );
 
-insert into visitor(name, phone_number, coach)
-VALUES ('Алекс', '+79213633374', 1);
-
-insert into coach(name) values ('Василий');
-
+CREATE TABLE subscription(
+    id integer,
+    title varchar,
+    price decimal,
+    description varchar,
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE coach(
     id serial,

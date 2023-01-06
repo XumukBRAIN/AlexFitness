@@ -14,6 +14,9 @@ public class Visitor {
     @JoinColumn(name = "coach")
     private int coach;
 
+    @JoinColumn(name = "subscription_id")
+    private int subscription_id;
+
     public Visitor() {
     }
 
