@@ -19,4 +19,8 @@ public class CoachService {
     public Optional<Coach> getCoach(Integer id) {
         return coachRepo.findById(id);
     }
+
+    public Coach findByName(String name) {
+        return coachRepo.findByName(name);
+    }
 }

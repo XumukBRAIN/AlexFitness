@@ -20,4 +20,17 @@ public class VisitorService {
         return visitorRepo.findById(id);
     }
 
+    public Visitor findByPhoneNumber(String phone) {
+        return visitorRepo.findByPhoneNumber(phone);
+    }
+
+    public Visitor registerVisitor(Visitor visitor) {
+        if (visitorRepo.isRegister(visitor.getId())) {
+            return visitor;
+        } else {
+            return visitorRepo.save(visitor);
+        }
+    }
+
+
 }
