@@ -23,13 +23,13 @@ public class VisitorController {
     }
 
     @GetMapping("/findByPhone/{phone}")
-   public Visitor findByNumberPhone(@PathVariable String phone) {
+    public Visitor findByNumberPhone(@PathVariable String phone) {
         return visitorService.findByPhoneNumber(phone);
-   }
+    }
 
-   @GetMapping("/registerVisitor/{visitor}")
-   public Visitor registerVisitor(@PathVariable Visitor visitor) {
-        return visitorService.registerVisitor(visitor);
-   }
+    @PostMapping("/registerVisitor/{visitor}")
+    public void registerVisitor(@PathVariable Visitor visitor) {
+        visitorService.registerVisitor(visitor);
+    }
 
 }

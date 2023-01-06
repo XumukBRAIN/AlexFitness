@@ -5,6 +5,7 @@ import com.example.AlexFitness.repository.VisitorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -24,11 +25,12 @@ public class VisitorService {
         return visitorRepo.findByPhoneNumber(phone);
     }
 
-    public Visitor registerVisitor(Visitor visitor) {
+    @Transactional
+    public void registerVisitor(Visitor visitor) {
         if (visitorRepo.isRegister(visitor.getId())) {
-            return visitor;
+            return;
         } else {
-            return visitorRepo.save(visitor);
+            visitorRepo.save(visitor);
         }
     }
 
