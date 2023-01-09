@@ -1,37 +1,38 @@
 package com.example.AlexFitness.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name = "visitor")
-public class Visitor {
+@Table(name = "client")
+public class Client {
 
     @Id
-    private int id;
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
     private String name;
     private String phoneNumber;
-
     @JoinColumn(name = "coach")
     private int coach;
-
     @JoinColumn(name = "subscription_id")
-    private int subscription_id;
+    private int subscriptionId;
 
-    public Visitor() {
+    public Client() {
     }
 
-    public Visitor(int id, String name, String phoneNumber, int coach) {
-        this.id = id;
+
+    public Client(String name, String phoneNumber, int coach, int subscriptionId) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
+        this.subscriptionId = subscriptionId;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -57,5 +58,13 @@ public class Visitor {
 
     public void setCoach(int coach) {
         this.coach = coach;
+    }
+
+    public int getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(int subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 }

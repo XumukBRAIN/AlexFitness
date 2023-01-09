@@ -1,6 +1,9 @@
 package com.example.AlexFitness.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -12,15 +15,19 @@ public class Coach {
     private String name;
 
     @OneToMany(mappedBy = "coach")
-    private List<Visitor> visitors;
+    private List<Client> clients;
+
+    @OneToMany(mappedBy = "coachId")
+    private List<RequestFit> requestFits;
 
     public Coach() {
     }
 
-    public Coach(int id, String name, List<Visitor> visitors) {
+    public Coach(int id, String name, List<Client> clients, List<RequestFit> requestFits) {
         this.id = id;
         this.name = name;
-        this.visitors = visitors;
+        this.clients = clients;
+        this.requestFits = requestFits;
     }
 
     public int getId() {
@@ -39,11 +46,20 @@ public class Coach {
         this.name = name;
     }
 
-    public List<Visitor> getVisitors() {
-        return visitors;
+
+    public List<Client> getClients() {
+        return clients;
     }
 
-    public void setVisitors(List<Visitor> visitors) {
-        this.visitors = visitors;
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public List<RequestFit> getRequestFits() {
+        return requestFits;
+    }
+
+    public void setRequestFits(List<RequestFit> requestFits) {
+        this.requestFits = requestFits;
     }
 }
