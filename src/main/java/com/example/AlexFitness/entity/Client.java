@@ -1,6 +1,7 @@
 package com.example.AlexFitness.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
@@ -11,6 +12,7 @@ public class Client {
     @GeneratedValue(generator = "UUID")
     private UUID id;
     private String name;
+    @Size(min = 11, max = 11, message = "Номер начинается с цифры 8. Ожидается 11 цифр")
     private String phoneNumber;
     @JoinColumn(name = "coach")
     private int coach;
