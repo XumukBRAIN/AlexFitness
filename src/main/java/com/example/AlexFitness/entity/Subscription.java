@@ -20,18 +20,23 @@ public class Subscription {
     private BigDecimal price;
     private String description;
 
-    @OneToMany(mappedBy = "subscription_id")
-    private List<Visitor> visitors;
+
+    @OneToMany(mappedBy = "subscriptionId")
+    private List<Client> clients;
+
+    @OneToMany(mappedBy = "subId")
+    private List<RequestFit> requestFits;
 
     public Subscription() {
     }
 
-    public Subscription(int id, String title, BigDecimal price, String description, List<Visitor> visitors) {
+    public Subscription(int id, String title, BigDecimal price, String description, List<Client> clients, List<RequestFit> requestFits) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.description = description;
-        this.visitors = visitors;
+        this.clients = clients;
+        this.requestFits = requestFits;
     }
 
     public int getId() {
@@ -66,11 +71,20 @@ public class Subscription {
         this.description = description;
     }
 
-    public List<Visitor> getVisitors() {
-        return visitors;
+
+    public List<Client> getClients() {
+        return clients;
     }
 
-    public void setVisitors(List<Visitor> visitors) {
-        this.visitors = visitors;
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public List<RequestFit> getRequestFits() {
+        return requestFits;
+    }
+
+    public void setRequestFits(List<RequestFit> requestFits) {
+        this.requestFits = requestFits;
     }
 }
