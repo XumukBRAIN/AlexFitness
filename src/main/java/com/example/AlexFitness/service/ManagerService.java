@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class ManagerService {
-    public final ManagerRepo managerRepo;
+    private final ManagerRepo managerRepo;
 
     @Autowired
     public ManagerService(ManagerRepo managerRepo) {

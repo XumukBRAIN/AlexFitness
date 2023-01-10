@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/clientRequest")
 public class RequestFitController {
-    public final RequestFitService requestFitService;
+    private final RequestFitService requestFitService;
 
     @Autowired
     public RequestFitController(RequestFitService requestFitService) {

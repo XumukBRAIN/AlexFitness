@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/util")
 public class UtilController {
-    public final UtilService utilService;
+    private final UtilService utilService;
 
     @Autowired
     public UtilController(UtilService utilService) {
