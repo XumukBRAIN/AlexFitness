@@ -1,7 +1,6 @@
 package com.example.AlexFitness.controller;
 
 
-import com.example.AlexFitness.entity.Client;
 import com.example.AlexFitness.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,7 +18,7 @@ public class UtilController {
     }
 
     @PatchMapping("/updateClient")
-    public void updateClient(Client client) {
-        utilService.updateClient(client);
+    public void updateClient(String phoneNumber) {
+        utilService.updateClient(phoneNumber);
     }
 }

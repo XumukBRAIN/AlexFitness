@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class RequestFitService {
-    public final RequestFitRepo requestFitRepo;
+    private final RequestFitRepo requestFitRepo;
 
     @Autowired
     public RequestFitService(RequestFitRepo requestFitRepo) {
@@ -24,5 +24,9 @@ public class RequestFitService {
     @Transactional
     public void createRequest(RequestFit requestFit) {
         requestFitRepo.save(requestFit);
+    }
+
+    public RequestFit findByPhoneNumber(String phoneNumber) {
+        return requestFitRepo.findByPhoneNumber(phoneNumber);
     }
 }

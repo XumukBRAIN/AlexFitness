@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 public class ClientService {
-    public final ClientRepo clientRepo;
+    private final ClientRepo clientRepo;
 
     @Autowired
     public ClientService(ClientRepo clientRepo) {
@@ -32,4 +32,7 @@ public class ClientService {
     }
 
 
+    public void updateClient(Client client) {
+        clientRepo.save(client);
+    }
 }

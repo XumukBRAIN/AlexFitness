@@ -9,8 +9,8 @@ import javax.transaction.Transactional;
 
 @Service
 public class UtilService {
-    public final ClientService clientService;
-    public final RequestFitService requestFitService;
+    private final ClientService clientService;
+    private final RequestFitService requestFitService;
 
     @Autowired
     public UtilService(ClientService clientService, RequestFitService requestFitService) {
@@ -19,12 +19,13 @@ public class UtilService {
     }
 
     @Transactional
-    public void updateClient(Client client) {
-        Client client1 = clientService.clientRepo.findByPhoneNumber(client.getPhoneNumber());
-        RequestFit requestFit = requestFitService.requestFitRepo.findByPhoneNumber(client.getPhoneNumber());
+    public void updateClient(String phoneNumber) {
+        Client client1 = clientService.findByPhoneNumber(phoneNumber);
+        RequestFit requestFit = requestFitService.findByPhoneNumber(phoneNumber);
 
         client1.setCoach(requestFit.getCoachId());
         client1.setSubscriptionId(requestFit.getSubId());
-        //TODO
+
+        clientService.updateClient(client1);
     }
 }
