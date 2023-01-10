@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 public class ClientService {
-    private final ClientRepo clientRepo;
+    public final ClientRepo clientRepo;
 
     @Autowired
     public ClientService(ClientRepo clientRepo) {

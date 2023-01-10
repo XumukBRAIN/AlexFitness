@@ -20,6 +20,15 @@ public class RequestFit {
     private int subId;
     @JoinColumn(name = "coach_id")
     private int coachId;
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public UUID getId() {
         return id;
