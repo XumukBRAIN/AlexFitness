@@ -18,8 +18,14 @@ public class ManagerController {
         this.managerService = managerService;
     }
 
-    @GetMapping("/getOne/{id}")
-    public Optional<Manager> getManager(@PathVariable Integer id) {
+
+    @GetMapping("/getOne")
+    public Optional<Manager> getManagerById(@RequestParam Integer id) {
         return managerService.getManager(id);
+    }
+
+    @PostMapping("/createManager")
+    public void createManager(@RequestBody Manager manager) {
+        managerService.createManager(manager);
     }
 }

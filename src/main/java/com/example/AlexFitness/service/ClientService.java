@@ -22,8 +22,8 @@ public class ClientService {
         return clientRepo.findById(id);
     }
 
-    public Client findByPhoneNumber(String phone) {
-        return clientRepo.findByPhoneNumber(phone);
+    public Client findByPhoneNumber(String phoneNumber) {
+        return clientRepo.findByPhoneNumber(phoneNumber);
     }
 
     @Transactional
@@ -32,4 +32,7 @@ public class ClientService {
     }
 
 
+    public void updateClient(Client client) {
+        clientRepo.save(client);
+    }
 }

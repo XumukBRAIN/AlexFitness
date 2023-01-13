@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ClientRepo extends JpaRepository<Client, Integer> {
 
-    Client findByPhoneNumber(String phone);
+    Client findByPhoneNumber(String phoneNumber);
 
     Optional<Client> findById(UUID id);
 }

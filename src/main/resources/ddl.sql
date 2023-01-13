@@ -8,8 +8,8 @@ CREATE TABLE client
     PRIMARY KEY (id)
 );
 
-INSERT INTO client(name, phone_number, coach, subscription_id)
-values ('Client1', '89215783626', 1, 1);
+INSERT INTO client(name, phone_number)
+values ('Client111', '89370019090');
 
 CREATE TABLE subscription
 (
@@ -35,13 +35,25 @@ values ('Coach1');
 
 CREATE TABLE request_fit
 (
-    id       bigserial,
-    title    varchar default 'заявка на абонемента и тренера',
-    req_date timestamp,
-    sub_id   integer references subscription (id),
-    coach_id integer references coach (id),
+    id           bigserial,
+    title        varchar   default 'заявка на абонемента и тренера',
+    req_date     timestamp default current_timestamp,
+    sub_id       integer references subscription (id),
+    coach_id     integer references coach (id),
+    phone_number varchar,
+    is_approved  boolean   default false,
     primary key (id)
 );
+
+
+
+insert into request_fit(title, sub_id, coach_id, phone_number)
+values ('title111', 1, 1, '89370019090');
+
+insert into request_fit(title, sub_id, coach_id, phone_number)
+values ('абонемент129', 1, 1, 89205783624);
+
+drop table request_fit;
 
 CREATE TABLE manager
 (
@@ -49,5 +61,11 @@ CREATE TABLE manager
     name varchar,
     PRIMARY KEY (id)
 );
+
+drop table manager;
+
+CREATE SEQUENCE hibernate_sequence START 1;
+
+
 
 
