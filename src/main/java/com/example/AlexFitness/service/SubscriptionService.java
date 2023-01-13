@@ -17,6 +17,7 @@ public class SubscriptionService {
         this.subscriptionRepo = subscriptionRepo;
     }
 
+    @Transactional(readOnly = true)
     public List<Subscription> getAllSubs() {
         return subscriptionRepo.findAll();
     }

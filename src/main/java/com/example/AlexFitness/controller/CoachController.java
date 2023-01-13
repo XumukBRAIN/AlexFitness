@@ -4,11 +4,14 @@ import com.example.AlexFitness.model.dto.CoachDTO;
 import com.example.AlexFitness.model.entity.Coach;
 import com.example.AlexFitness.model.mapStruct.CoachMapper;
 import com.example.AlexFitness.service.CoachService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Api("Контроллер для тренера")
 @RestController
 @RequestMapping("/coach")
 public class CoachController {
@@ -21,18 +24,20 @@ public class CoachController {
         this.coachMapper = coachMapper;
     }
 
+    @ApiOperation("Метод для поиска тренера по ID")
     @GetMapping("/getOne/{id}")
     public Optional<Coach> getCoach(@PathVariable Integer id) {
         return coachService.getCoach(id);
     }
 
-
+    @ApiOperation("Метод для поиска тренера по имени")
     @GetMapping("/getCoach")
     public CoachDTO getCoachByName(@RequestParam String name) {
         Coach coach = coachService.findByName(name);
         return coachMapper.toCoachDTO(coach);
     }
 
+    @ApiOperation("Метод для добавления тренера в базу")
     @PostMapping("/createCoach")
     public void createCoach(@RequestBody CoachDTO coachDTO) {
         Coach coach = coachMapper.toCoach(coachDTO);

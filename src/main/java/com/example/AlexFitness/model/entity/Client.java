@@ -54,7 +54,7 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getCoach() {
+    public Integer getCoach() {
         return coach;
     }
 
@@ -62,7 +62,7 @@ public class Client {
         this.coach = coach;
     }
 
-    public int getSubscriptionId() {
+    public Integer getSubscriptionId() {
         return subscriptionId;
     }
 

@@ -23,6 +23,7 @@ public class RequestFitService {
         requestFitRepo.save(requestFit);
     }
 
+    @Transactional(readOnly = true)
     public RequestFit findByPhoneNumber(String phoneNumber) {
         return requestFitRepo.findByPhoneNumber(phoneNumber);
     }
