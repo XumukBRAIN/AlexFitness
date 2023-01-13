@@ -20,8 +20,14 @@ public class UtilService {
 
     @Transactional
     public void updateClient(String phoneNumber) {
-        Client client1 = clientService.findByPhoneNumber(phoneNumber);
         RequestFit requestFit = requestFitService.findByPhoneNumber(phoneNumber);
+        if (requestFit == null) {
+            //todo  throw
+        }
+        Client client1 = clientService.findByPhoneNumber(phoneNumber);
+        if (client1 == null) {
+            //todo throw
+        }
 
         client1.setCoach(requestFit.getCoachId());
         client1.setSubscriptionId(requestFit.getSubId());

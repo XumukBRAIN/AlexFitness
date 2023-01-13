@@ -5,11 +5,12 @@ import com.example.AlexFitness.entity.RequestFit;
 import com.example.AlexFitness.service.RequestFitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/clientRequest")
+@RequestMapping("/clientRequestFit")
 public class RequestFitController {
     private final RequestFitService requestFitService;
 
@@ -18,8 +19,10 @@ public class RequestFitController {
         this.requestFitService = requestFitService;
     }
 
-    @PostMapping("/createRequet")
-    public void createRequest(RequestFit requestFit) {
+    @PostMapping("/createRequestFit")
+    public void createRequest(@RequestBody RequestFit requestFit) {
         requestFitService.createRequest(requestFit);
     }
+
+
 }

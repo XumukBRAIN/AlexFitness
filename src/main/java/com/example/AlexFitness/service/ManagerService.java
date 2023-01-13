@@ -20,4 +20,8 @@ public class ManagerService {
     public Optional<Manager> getManager(Integer id) {
         return managerRepo.findById(id);
     }
+
+    public void createManager(Manager manager) {
+        managerRepo.save(manager);
+    }
 }

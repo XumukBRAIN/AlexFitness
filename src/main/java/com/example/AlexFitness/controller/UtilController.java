@@ -5,6 +5,7 @@ import com.example.AlexFitness.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,7 +19,10 @@ public class UtilController {
     }
 
     @PatchMapping("/updateClient")
-    public void updateClient(String phoneNumber) {
+    public void updateClient(@RequestParam(required = false)
+                                     String phoneNumber) {
         utilService.updateClient(phoneNumber);
     }
+
+
 }

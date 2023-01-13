@@ -22,4 +22,14 @@ public class ManagerController {
     public Optional<Manager> getManager(@PathVariable Integer id) {
         return managerService.getManager(id);
     }
+
+    @GetMapping("/getOne")
+    public Optional<Manager> getManagerById(@RequestParam Integer id) {
+        return managerService.getManager(id);
+    }
+
+    @PostMapping("/createManager")
+    public void createManager(@RequestBody Manager manager) {
+        managerService.createManager(manager);
+    }
 }
