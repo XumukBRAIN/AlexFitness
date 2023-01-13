@@ -1,7 +1,7 @@
 package com.example.AlexFitness.service;
 
 
-import com.example.AlexFitness.entity.RequestFit;
+import com.example.AlexFitness.model.entity.RequestFit;
 import com.example.AlexFitness.repository.RequestFitRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class RequestFitService {
         this.requestFitRepo = requestFitRepo;
     }
 
-    public RequestFit findByNubmerPhone(String phoneNumber) {
+    public RequestFit findByNumberPhone(String phoneNumber) {
         return requestFitRepo.findByPhoneNumber(phoneNumber);
     }
 

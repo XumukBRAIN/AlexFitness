@@ -1,6 +1,6 @@
 package com.example.AlexFitness.controller;
 
-import com.example.AlexFitness.entity.Coach;
+import com.example.AlexFitness.model.entity.Coach;
 import com.example.AlexFitness.service.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

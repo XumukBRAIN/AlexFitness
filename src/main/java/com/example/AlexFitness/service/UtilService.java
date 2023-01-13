@@ -1,7 +1,7 @@
 package com.example.AlexFitness.service;
 
-import com.example.AlexFitness.entity.Client;
-import com.example.AlexFitness.entity.RequestFit;
+import com.example.AlexFitness.model.entity.Client;
+import com.example.AlexFitness.model.entity.RequestFit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.example.AlexFitness.service;
 
 
-import com.example.AlexFitness.entity.Manager;
+import com.example.AlexFitness.model.entity.Manager;
 import com.example.AlexFitness.repository.ManagerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

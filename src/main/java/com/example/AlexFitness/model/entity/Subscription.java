@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Subscription {
 
     @Id
-    private int id;
+    private Integer id;
     private String title;
 
     @Min(value = 0, message = "Стоимость абонемента не может быть ниже нуля")
@@ -30,7 +30,7 @@ public class Subscription {
     public Subscription() {
     }
 
-    public Subscription(int id, String title, BigDecimal price, String description, List<Client> clients, List<RequestFit> requestFits) {
+    public Subscription(Integer id, String title, BigDecimal price, String description, List<Client> clients, List<RequestFit> requestFits) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -39,11 +39,11 @@ public class Subscription {
         this.requestFits = requestFits;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,12 +1,11 @@
 package com.example.AlexFitness.service;
 
-import com.example.AlexFitness.entity.Client;
+import com.example.AlexFitness.model.entity.Client;
 import com.example.AlexFitness.repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,10 +17,16 @@ public class ClientService {
         this.clientRepo = clientRepo;
     }
 
-    public Optional<Client> getVisitor(UUID id) {
-        return clientRepo.findById(id);
+    @Transactional(readOnly = true)
+    public Client getVisitor(UUID id) {
+        Client client = clientRepo.findById(id);
+        if (client == null) {
+            throw new RuntimeException("Клиент с таким ID не найден");
+        }
+        return client;
     }
 
+    @Transactional(readOnly = true)
     public Client findByPhoneNumber(String phoneNumber) {
         return clientRepo.findByPhoneNumber(phoneNumber);
     }
@@ -31,7 +36,7 @@ public class ClientService {
         clientRepo.save(client);
     }
 
-
+    @Transactional
     public void updateClient(Client client) {
         clientRepo.save(client);
     }

@@ -1,6 +1,6 @@
 package com.example.AlexFitness.service;
 
-import com.example.AlexFitness.entity.Coach;
+import com.example.AlexFitness.model.entity.Coach;
 import com.example.AlexFitness.repository.CoachRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

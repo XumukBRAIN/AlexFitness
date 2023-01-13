@@ -1,7 +1,7 @@
 package com.example.AlexFitness.controller;
 
 
-import com.example.AlexFitness.entity.RequestFit;
+import com.example.AlexFitness.model.entity.RequestFit;
 import com.example.AlexFitness.service.RequestFitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,5 @@ public class RequestFitController {
     public List<RequestFit> findNotApprovedRequests() {
         return requestFitService.findNotApprovedRequests();
     }
-
 
 }

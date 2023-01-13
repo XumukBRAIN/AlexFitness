@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -23,7 +23,7 @@ public class Client {
     }
 
 
-    public Client(String name, String phoneNumber, int coach, int subscriptionId) {
+    public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
@@ -58,7 +58,7 @@ public class Client {
         return coach;
     }
 
-    public void setCoach(int coach) {
+    public void setCoach(Integer coach) {
         this.coach = coach;
     }
 
@@ -66,7 +66,7 @@ public class Client {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(int subscriptionId) {
+    public void setSubscriptionId(Integer subscriptionId) {
         this.subscriptionId = subscriptionId;
     }
 }

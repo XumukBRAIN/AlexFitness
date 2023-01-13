@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 
 import org.hibernate.annotations.CreationTimestamp;
