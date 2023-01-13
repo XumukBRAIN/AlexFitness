@@ -9,11 +9,8 @@ import java.util.List;
 @Repository
 public interface RequestFitRepo extends JpaRepository<RequestFit, Integer> {
 
-    RequestFit findById(Long id);
-
-    List<RequestFit> findAllByIsApprovedFalse();
-
     List<RequestFit> findAllByIsApprovedNull();
 
     RequestFit findByPhoneNumber(String phoneNumber);
+
 }

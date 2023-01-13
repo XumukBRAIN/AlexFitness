@@ -18,10 +18,6 @@ public class RequestFitService {
         this.requestFitRepo = requestFitRepo;
     }
 
-    public RequestFit findByNumberPhone(String phoneNumber) {
-        return requestFitRepo.findByPhoneNumber(phoneNumber);
-    }
-
     @Transactional
     public void createRequest(RequestFit requestFit) {
         requestFitRepo.save(requestFit);
@@ -33,11 +29,21 @@ public class RequestFitService {
 
     @Transactional(readOnly = true)
     public List<RequestFit> findNotApprovedRequests() {
-        return requestFitRepo.findAllByIsApprovedFalse();
+        return requestFitRepo.findAllByIsApprovedNull();
     }
 
     @Transactional
-    public void approve(RequestFit requestFit) {
+    public void approveRequestFit(RequestFit requestFit) {
         requestFitRepo.save(requestFit);
+    }
+
+    @Transactional
+    public void rejectRequestFit(String phoneNumber) {
+        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
+        if (requestFit == null) {
+            throw new RuntimeException("Заявка с таким номером телефона не найдена");
+        }
+        requestFit.setApproved(false);
+
     }
 }

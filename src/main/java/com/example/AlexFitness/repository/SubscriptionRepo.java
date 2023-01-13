@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubscriptionRepo extends JpaRepository<Subscription, Integer> {
+
+
+    //List<Subscription> findAll();
 }

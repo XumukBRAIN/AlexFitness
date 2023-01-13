@@ -1,26 +1,39 @@
 package com.example.AlexFitness.controller;
 
 
+import com.example.AlexFitness.model.entity.RequestFit;
+import com.example.AlexFitness.service.RequestFitService;
 import com.example.AlexFitness.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/util")
 public class UtilController {
     private final UtilService utilService;
+    private final RequestFitService requestFitService;
 
     @Autowired
-    public UtilController(UtilService utilService) {
+    public UtilController(UtilService utilService, RequestFitService requestFitService) {
         this.utilService = utilService;
+        this.requestFitService = requestFitService;
+    }
+
+    @GetMapping("/showRequestFit")
+    public List<RequestFit> showRequestFit() {
+        return requestFitService.findNotApprovedRequests();
+    }
+
+    @PatchMapping("/rejectRequestFit")
+    public void rejectRequestFit(@RequestParam String phoneNumber) {
+        requestFitService.rejectRequestFit(phoneNumber);
     }
 
     @PatchMapping("/updateClient")
     public void updateClient(@RequestParam String phoneNumber) {
-        utilService.updateClient(phoneNumber);
+        utilService.approve(phoneNumber);
     }
 
 

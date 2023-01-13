@@ -19,23 +19,20 @@ public class UtilService {
     }
 
     @Transactional
-    public void updateClient(String phoneNumber) {
+    public void approve(String phoneNumber) {
         RequestFit requestFit = requestFitService.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            return;
-            //todo
+            throw new RuntimeException("Заявка с таким номером телефона не найдена");
         }
         Client client1 = clientService.findByPhoneNumber(phoneNumber);
         if (client1 == null) {
-            return;
-            //todo
+            throw new RuntimeException("Клиент с таким номером телефона не найден");
         }
-
         requestFit.setApproved(true);
         client1.setCoach(requestFit.getCoachId());
         client1.setSubscriptionId(requestFit.getSubId());
 
         clientService.updateClient(client1);
-        requestFitService.approve(requestFit);
+        requestFitService.approveRequestFit(requestFit);
     }
 }

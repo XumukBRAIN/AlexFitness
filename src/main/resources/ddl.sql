@@ -27,6 +27,7 @@ CREATE TABLE coach
 (
     id   serial,
     name varchar,
+
     PRIMARY KEY (id)
 );
 
