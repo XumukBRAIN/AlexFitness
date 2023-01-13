@@ -1,42 +1,64 @@
 package com.example.AlexFitness.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "request_fit")
 public class RequestFit {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "request_fit_id_seq", sequenceName = "REQUEST_FIT_ID_SEQ", allocationSize = 1)
+    private Long id;
     private String title;
-    private LocalDateTime reqData;
-    @JoinColumn(name = "sub_id")
-    private int subId;
-    @JoinColumn(name = "coach_id")
-    private int coachId;
 
-    public UUID getId() {
+    @Column(name = "req_date")
+    @CreationTimestamp
+    private LocalDateTime reqDate;
+    @JoinColumn(name = "sub_id")
+    private Integer subId;
+    @JoinColumn(name = "coach_id")
+    private Integer coachId;
+    private String phoneNumber;
+    @Column(name = "is_approved")
+    private Boolean isApproved;
+
+    public Boolean getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(Boolean approved) {
+        isApproved = approved;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
         return id;
     }
 
     public RequestFit() {
     }
 
-    public RequestFit(UUID id, String title, LocalDateTime reqData, int subId, int coachId) {
-        this.id = id;
+    public RequestFit(String title, int subId, int coachId, LocalDateTime reqDate) {
         this.title = title;
-        this.reqData = reqData;
         this.subId = subId;
         this.coachId = coachId;
+        this.reqDate = reqDate;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -48,27 +70,27 @@ public class RequestFit {
         this.title = title;
     }
 
-    public LocalDateTime getReqData() {
-        return reqData;
-    }
-
-    public void setReqData(LocalDateTime reqData) {
-        this.reqData = reqData;
-    }
-
-    public int getSubId() {
+    public Integer getSubId() {
         return subId;
     }
 
-    public void setSubId(int subId) {
+    public void setSubId(Integer subId) {
         this.subId = subId;
     }
 
-    public int getCoachId() {
+    public Integer getCoachId() {
         return coachId;
     }
 
-    public void setCoachId(int coachId) {
+    public void setCoachId(Integer coachId) {
         this.coachId = coachId;
+    }
+
+    public LocalDateTime getReqDate() {
+        return reqDate;
+    }
+
+    public void setReqDate(LocalDateTime reqDate) {
+        this.reqDate = reqDate;
     }
 }

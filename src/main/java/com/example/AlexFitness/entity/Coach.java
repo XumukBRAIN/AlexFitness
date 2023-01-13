@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "coach")
 public class Coach {
     @Id
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -23,18 +23,17 @@ public class Coach {
     public Coach() {
     }
 
-    public Coach(int id, String name, List<Client> clients, List<RequestFit> requestFits) {
-        this.id = id;
+    public Coach(Integer id, String name, List<Client> clients, List<RequestFit> requestFits) {
         this.name = name;
         this.clients = clients;
         this.requestFits = requestFits;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

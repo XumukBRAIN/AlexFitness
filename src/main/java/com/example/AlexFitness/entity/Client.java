@@ -15,9 +15,9 @@ public class Client {
     @Size(min = 11, max = 11, message = "Номер начинается с цифры 8. Ожидается 11 цифр")
     private String phoneNumber;
     @JoinColumn(name = "coach")
-    private int coach;
+    private Integer coach;
     @JoinColumn(name = "subscription_id")
-    private int subscriptionId;
+    private Integer subscriptionId;
 
     public Client() {
     }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class ManagerService {
-    public final ManagerRepo managerRepo;
+    private final ManagerRepo managerRepo;
 
     @Autowired
     public ManagerService(ManagerRepo managerRepo) {
@@ -19,5 +19,9 @@ public class ManagerService {
 
     public Optional<Manager> getManager(Integer id) {
         return managerRepo.findById(id);
+    }
+
+    public void createManager(Manager manager) {
+        managerRepo.save(manager);
     }
 }
