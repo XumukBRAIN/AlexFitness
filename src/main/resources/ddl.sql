@@ -41,8 +41,11 @@ CREATE TABLE request_fit
     sub_id       integer references subscription (id),
     coach_id     integer references coach (id),
     phone_number varchar,
+    is_approved  boolean   default false,
     primary key (id)
 );
+
+
 
 insert into request_fit(title, sub_id, coach_id, phone_number)
 values ('title111', 1, 1, '89370019090');

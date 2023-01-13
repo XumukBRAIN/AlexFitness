@@ -19,8 +19,7 @@ public class UtilController {
     }
 
     @PatchMapping("/updateClient")
-    public void updateClient(@RequestParam(required = false)
-                                     String phoneNumber) {
+    public void updateClient(@RequestParam String phoneNumber) {
         utilService.updateClient(phoneNumber);
     }
 

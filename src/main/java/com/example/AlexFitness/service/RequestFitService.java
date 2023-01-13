@@ -5,8 +5,9 @@ import com.example.AlexFitness.entity.RequestFit;
 import com.example.AlexFitness.repository.RequestFitRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class RequestFitService {
@@ -28,5 +29,15 @@ public class RequestFitService {
 
     public RequestFit findByPhoneNumber(String phoneNumber) {
         return requestFitRepo.findByPhoneNumber(phoneNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RequestFit> findNotApprovedRequests() {
+        return requestFitRepo.findAllByIsApprovedFalse();
+    }
+
+    @Transactional
+    public void approve(RequestFit requestFit) {
+        requestFitRepo.save(requestFit);
     }
 }

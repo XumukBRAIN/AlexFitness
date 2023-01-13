@@ -4,7 +4,7 @@ package com.example.AlexFitness.entity;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -19,12 +19,22 @@ public class RequestFit {
 
     @Column(name = "req_date")
     @CreationTimestamp
-    private LocalDate reqDate;
+    private LocalDateTime reqDate;
     @JoinColumn(name = "sub_id")
     private Integer subId;
     @JoinColumn(name = "coach_id")
     private Integer coachId;
     private String phoneNumber;
+    @Column(name = "is_approved")
+    private Boolean isApproved;
+
+    public Boolean getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(Boolean approved) {
+        isApproved = approved;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -41,7 +51,7 @@ public class RequestFit {
     public RequestFit() {
     }
 
-    public RequestFit(String title, int subId, int coachId, LocalDate reqDate) {
+    public RequestFit(String title, int subId, int coachId, LocalDateTime reqDate) {
         this.title = title;
         this.subId = subId;
         this.coachId = coachId;
@@ -76,11 +86,11 @@ public class RequestFit {
         this.coachId = coachId;
     }
 
-    public LocalDate getReqDate() {
+    public LocalDateTime getReqDate() {
         return reqDate;
     }
 
-    public void setReqDate(LocalDate reqDate) {
+    public void setReqDate(LocalDateTime reqDate) {
         this.reqDate = reqDate;
     }
 }

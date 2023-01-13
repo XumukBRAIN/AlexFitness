@@ -22,16 +22,20 @@ public class UtilService {
     public void updateClient(String phoneNumber) {
         RequestFit requestFit = requestFitService.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            //todo  throw
+            return;
+            //todo
         }
         Client client1 = clientService.findByPhoneNumber(phoneNumber);
         if (client1 == null) {
-            //todo throw
+            return;
+            //todo
         }
 
+        requestFit.setApproved(true);
         client1.setCoach(requestFit.getCoachId());
         client1.setSubscriptionId(requestFit.getSubId());
 
         clientService.updateClient(client1);
+        requestFitService.approve(requestFit);
     }
 }
