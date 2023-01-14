@@ -18,16 +18,19 @@ public class Client {
     private Integer coach;
     @JoinColumn(name = "subscription_id")
     private Integer subscriptionId;
+    private String email;
+
 
     public Client() {
     }
 
 
-    public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId) {
+    public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId, String email) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
         this.subscriptionId = subscriptionId;
+        this.email = email;
     }
 
     public UUID getId() {
@@ -68,5 +71,13 @@ public class Client {
 
     public void setSubscriptionId(Integer subscriptionId) {
         this.subscriptionId = subscriptionId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -31,6 +31,7 @@ public class RequestFitService {
         this.mailSender = mailSender;
     }
 
+
     @Autowired
     public RequestFitService(RequestFitRepo requestFitRepo, ClientService clientService) {
         this.requestFitRepo = requestFitRepo;
@@ -77,8 +78,12 @@ public class RequestFitService {
         requestFit.setApproved(true);
         client1.setCoach(requestFit.getCoachId());
         client1.setSubscriptionId(requestFit.getSubId());
+
+        sendMessage(client1.getEmail(), "Одобрено", "Ваша заявка принята!");
+
     }
 
+    @Transactional
     public void sendMessage(String to, String subject, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(mail);
@@ -88,4 +93,5 @@ public class RequestFitService {
 
         mailSender.send(mailMessage);
     }
+
 }

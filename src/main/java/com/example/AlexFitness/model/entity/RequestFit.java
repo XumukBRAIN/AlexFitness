@@ -27,6 +27,8 @@ public class RequestFit {
     private String phoneNumber;
     @Column(name = "is_approved")
     private Boolean isApproved;
+    @JoinColumn(name = "email")
+    private String email;
 
     public Boolean getApproved() {
         return isApproved;
@@ -51,11 +53,13 @@ public class RequestFit {
     public RequestFit() {
     }
 
-    public RequestFit(String title, Integer subId, Integer coachId, LocalDateTime reqDate) {
+    public RequestFit(String title, Integer subId, Integer coachId, LocalDateTime reqDate, String phoneNumber, String email) {
         this.title = title;
         this.subId = subId;
         this.coachId = coachId;
         this.reqDate = reqDate;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     public void setId(Long id) {
@@ -92,5 +96,13 @@ public class RequestFit {
 
     public void setReqDate(LocalDateTime reqDate) {
         this.reqDate = reqDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

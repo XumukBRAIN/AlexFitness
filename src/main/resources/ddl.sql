@@ -5,8 +5,11 @@ CREATE TABLE client
     phone_number    varchar not null unique,
     coach           int references coach (id),
     subscription_id integer references subscription (id),
+    email           varchar unique,
     PRIMARY KEY (id)
 );
+
+drop table client;
 
 INSERT INTO client(name, phone_number)
 values ('Client111', '89370019090');
@@ -43,6 +46,7 @@ CREATE TABLE request_fit
     coach_id     integer references coach (id),
     phone_number varchar,
     is_approved  boolean   default false,
+    email        varchar references client (email),
     primary key (id)
 );
 

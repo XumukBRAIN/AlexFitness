@@ -8,15 +8,18 @@ public class ClientDTO {
     private UUID clientId;
     private String clientName;
     private String clientPhoneNumber;
-    private Integer coach;
-    private Integer subscriptionId;
+    private Integer clientCoach;
+    private Integer clientSubscriptionId;
+    private String clientEmail;
 
-    public ClientDTO(UUID clientId, String clientName, String clientPhoneNumber, Integer coach, Integer subscriptionId) {
+    public ClientDTO(UUID clientId, String clientName, String clientPhoneNumber,
+                     String clientEmail, Integer clientCoach, Integer clientSubscriptionId) {
         this.clientId = clientId;
         this.clientName = clientName;
         this.clientPhoneNumber = clientPhoneNumber;
-        this.coach = coach;
-        this.subscriptionId = subscriptionId;
+        this.clientCoach = clientCoach;
+        this.clientSubscriptionId = clientSubscriptionId;
+        this.clientEmail = clientEmail;
     }
 
     public UUID getClientId() {
@@ -43,19 +46,27 @@ public class ClientDTO {
         this.clientPhoneNumber = clientPhoneNumber;
     }
 
-    public Integer getCoach() {
-        return coach;
+    public Integer getClientCoach() {
+        return clientCoach;
     }
 
-    public void setCoach(Integer coach) {
-        this.coach = coach;
+    public void setClientCoach(Integer clientCoach) {
+        this.clientCoach = clientCoach;
     }
 
-    public Integer getSubscriptionId() {
-        return subscriptionId;
+    public Integer getClientSubscriptionId() {
+        return clientSubscriptionId;
     }
 
-    public void setSubscriptionId(Integer subscriptionId) {
-        this.subscriptionId = subscriptionId;
+    public void setClientSubscriptionId(Integer clientSubscriptionId) {
+        this.clientSubscriptionId = clientSubscriptionId;
+    }
+
+    public String getClientEmail() {
+        return clientEmail;
+    }
+
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
     }
 }

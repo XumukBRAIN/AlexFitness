@@ -10,10 +10,10 @@ import java.util.UUID;
 
 @Service
 public class ClientService {
-    private ClientRepo clientRepo;
+    private final ClientRepo clientRepo;
 
     @Autowired
-    public void setClientRepo(ClientRepo clientRepo) {
+    public ClientService(ClientRepo clientRepo) {
         this.clientRepo = clientRepo;
     }
 
@@ -35,5 +35,6 @@ public class ClientService {
     public void registerVisitor(Client client) {
         clientRepo.save(client);
     }
-    
+
+
 }
