@@ -2,11 +2,14 @@ package com.example.AlexFitness.model.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 @Table(name = "client")
 public class Client {
+
+    private BigDecimal balance;
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -19,6 +22,7 @@ public class Client {
     @JoinColumn(name = "subscription_id")
     private Integer subscriptionId;
     private String email;
+
 
 
     public Client() {
@@ -79,5 +83,13 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }

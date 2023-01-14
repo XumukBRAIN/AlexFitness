@@ -5,9 +5,12 @@ CREATE TABLE client
     phone_number    varchar not null unique,
     coach           int references coach (id),
     subscription_id integer references subscription (id),
-    email           varchar unique,
+    email           varchar not null unique,
     PRIMARY KEY (id)
 );
+
+alter table client
+    add balance decimal;
 
 drop table client;
 

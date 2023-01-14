@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Api("Контроллер для клиента")
@@ -41,6 +42,18 @@ public class ClientController {
     @PostMapping("/registerVisitor")
     public void registerVisitor(@RequestBody ClientDTO clientDTO) {
         clientService.registerVisitor(clientMapper.toClient(clientDTO));
+    }
+
+    @ApiOperation("Метод для удаления клиента из базы данных")
+    @PutMapping("/deleteVisitor")
+    public void deleteClient(@RequestParam String phoneNumber) {
+        clientService.deleteClient(phoneNumber);
+    }
+
+    @ApiOperation("Метод для пополнения личного кабинета клиента")
+    @PatchMapping("/pay")
+    public void payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
+        clientService.payClient(phoneNumber, money);
     }
 
 

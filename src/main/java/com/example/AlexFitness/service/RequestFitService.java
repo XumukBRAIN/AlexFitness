@@ -3,6 +3,7 @@ package com.example.AlexFitness.service;
 
 import com.example.AlexFitness.model.entity.Client;
 import com.example.AlexFitness.model.entity.RequestFit;
+import com.example.AlexFitness.repository.ClientRepo;
 import com.example.AlexFitness.repository.RequestFitRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class RequestFitService {
     private final RequestFitRepo requestFitRepo;
-    private final ClientService clientService;
+    private final ClientRepo clientRepo;
 
     @Value("${fitness.mail.username}")
     private String mail;
@@ -33,36 +34,36 @@ public class RequestFitService {
 
 
     @Autowired
-    public RequestFitService(RequestFitRepo requestFitRepo, ClientService clientService) {
+    public RequestFitService(RequestFitRepo requestFitRepo, ClientRepo clientRepo) {
         this.requestFitRepo = requestFitRepo;
-        this.clientService = clientService;
+        this.clientRepo = clientRepo;
     }
 
-    @Transactional
+
     public void createRequest(RequestFit requestFit) {
         requestFitRepo.save(requestFit);
     }
 
-    @Transactional(readOnly = true)
+
     public RequestFit findByPhoneNumber(String phoneNumber) {
         return requestFitRepo.findByPhoneNumber(phoneNumber);
     }
 
-    @Transactional(readOnly = true)
+
     public List<RequestFit> findNotApprovedRequests() {
         return requestFitRepo.findAllByIsApprovedNull();
     }
 
 
-    @Transactional
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
             throw new RuntimeException("Заявка с таким номером телефона не найдена");
         }
         requestFit.setApproved(false);
+        requestFitRepo.save(requestFit);
 
-        sendMessage("andrew_1375@mail.ru", "Отказ", "Ваша заявка отклонена!!!!!!!!");
+        sendMessage(requestFit.getEmail(), "Отказ", "Ваша заявка отклонена!!!!!!!!");
     }
 
     @Transactional
@@ -71,19 +72,23 @@ public class RequestFitService {
         if (requestFit == null) {
             throw new RuntimeException("Заявка с таким номером телефона не найдена");
         }
-        Client client1 = clientService.findByPhoneNumber(phoneNumber);
-        if (client1 == null) {
+        Client client = clientRepo.findByPhoneNumber(phoneNumber);
+        if (client == null) {
             throw new RuntimeException("Клиент с таким номером телефона не найден");
         }
-        requestFit.setApproved(true);
-        client1.setCoach(requestFit.getCoachId());
-        client1.setSubscriptionId(requestFit.getSubId());
 
-        sendMessage(client1.getEmail(), "Одобрено", "Ваша заявка принята!");
+        requestFit.setApproved(true);
+        requestFitRepo.save(requestFit);
+
+        client.setCoach(requestFit.getCoachId());
+        client.setSubscriptionId(requestFit.getSubId());
+        clientRepo.save(client);
+
+        sendMessage(client.getEmail(), "Одобрено", "Ваша заявка принята!");
 
     }
 
-    @Transactional
+
     public void sendMessage(String to, String subject, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(mail);
