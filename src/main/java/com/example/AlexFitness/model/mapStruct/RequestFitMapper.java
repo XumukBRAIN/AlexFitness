@@ -6,6 +6,8 @@ import com.example.AlexFitness.model.entity.RequestFit;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RequestFitMapper {
 
@@ -16,6 +18,8 @@ public interface RequestFitMapper {
     @Mapping(target = "requestFitPhoneNumber", source = "phoneNumber")
     RequestFitDTO toRequestFitDto(RequestFit requestFit);
 
+    List<RequestFitDTO> toRequestFitListDTO(List<RequestFit> requestFit);
+
 
     @Mapping(target = "id", source = "requestFitId")
     @Mapping(target = "title", source = "requestFitTitle")
@@ -23,4 +27,7 @@ public interface RequestFitMapper {
     @Mapping(target = "coachId", source = "requestFitCoachId")
     @Mapping(target = "phoneNumber", source = "requestFitPhoneNumber")
     RequestFit toRequestFit(RequestFitDTO requestFitDTO);
+
+
+    List<RequestFit> toRequestFitList(List<RequestFitDTO> requestFitDTO);
 }

@@ -1,5 +1,7 @@
 package com.example.AlexFitness.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,9 +15,11 @@ public class Coach {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coach")
     private List<Client> clients;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coachId")
     private List<RequestFit> requestFits;
 

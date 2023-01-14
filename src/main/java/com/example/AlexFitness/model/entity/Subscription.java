@@ -1,5 +1,7 @@
 package com.example.AlexFitness.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -21,9 +23,11 @@ public class Subscription {
     private String description;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "subscriptionId")
     private List<Client> clients;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "subId")
     private List<RequestFit> requestFits;
 
