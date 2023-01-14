@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -51,7 +51,7 @@ public class RequestFit {
     public RequestFit() {
     }
 
-    public RequestFit(String title, int subId, int coachId, LocalDateTime reqDate) {
+    public RequestFit(String title, Integer subId, Integer coachId, LocalDateTime reqDate) {
         this.title = title;
         this.subId = subId;
         this.coachId = coachId;

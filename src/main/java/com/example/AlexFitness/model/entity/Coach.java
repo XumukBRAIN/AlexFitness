@@ -1,22 +1,25 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "coach")
 public class Coach {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "coach_id_seq", sequenceName = "COACH_ID_SEQ", allocationSize = 1)
     private Integer id;
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coach")
     private List<Client> clients;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "coachId")
     private List<RequestFit> requestFits;
 

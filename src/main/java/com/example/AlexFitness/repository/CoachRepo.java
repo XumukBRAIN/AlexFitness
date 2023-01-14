@@ -1,6 +1,6 @@
 package com.example.AlexFitness.repository;
 
-import com.example.AlexFitness.entity.Coach;
+import com.example.AlexFitness.model.entity.Coach;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface CoachRepo extends JpaRepository<Coach, Integer> {
 
     Coach findByName(String name);
+
 }

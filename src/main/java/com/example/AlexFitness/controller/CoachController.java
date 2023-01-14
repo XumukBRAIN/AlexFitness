@@ -1,32 +1,47 @@
 package com.example.AlexFitness.controller;
 
-import com.example.AlexFitness.entity.Coach;
+import com.example.AlexFitness.model.dto.CoachDTO;
+import com.example.AlexFitness.model.entity.Coach;
+import com.example.AlexFitness.model.mapStruct.CoachMapper;
 import com.example.AlexFitness.service.CoachService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Api("Контроллер для тренера")
 @RestController
 @RequestMapping("/coach")
 public class CoachController {
     private final CoachService coachService;
+    private final CoachMapper coachMapper;
 
     @Autowired
-    public CoachController(CoachService coachService) {
+    public CoachController(CoachService coachService, CoachMapper coachMapper) {
         this.coachService = coachService;
+        this.coachMapper = coachMapper;
     }
 
+    @ApiOperation("Метод для поиска тренера по ID")
     @GetMapping("/getOne/{id}")
     public Optional<Coach> getCoach(@PathVariable Integer id) {
         return coachService.getCoach(id);
     }
 
-    @GetMapping("/getCoach/{name}")
-    public Coach findByName(@PathVariable String name) {
-        return coachService.findByName(name);
+    @ApiOperation("Метод для поиска тренера по имени")
+    @GetMapping("/getCoach")
+    public CoachDTO getCoachByName(@RequestParam String name) {
+        Coach coach = coachService.findByName(name);
+        return coachMapper.toCoachDTO(coach);
     }
+
+    @ApiOperation("Метод для добавления тренера в базу")
+    @PostMapping("/createCoach")
+    public void createCoach(@RequestBody CoachDTO coachDTO) {
+        Coach coach = coachMapper.toCoach(coachDTO);
+        coachService.createCoach(coach);
+    }
+
 }

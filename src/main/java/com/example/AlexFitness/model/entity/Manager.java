@@ -1,4 +1,4 @@
-package com.example.AlexFitness.entity;
+package com.example.AlexFitness.model.entity;
 
 import javax.persistence.*;
 
@@ -9,13 +9,13 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "manager_id_seq", sequenceName = "MANAGER_ID_SEQ", allocationSize = 1)
-    private int id;
+    private Integer id;
     private String name;
 
     public Manager() {
     }
 
-    public Manager(int id, String name) {
+    public Manager(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -24,7 +24,7 @@ public class Manager {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
