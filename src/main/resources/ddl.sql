@@ -9,13 +9,6 @@ CREATE TABLE client
     PRIMARY KEY (id)
 );
 
-alter table client
-    add balance decimal;
-
-drop table client;
-
-INSERT INTO client(name, phone_number)
-values ('Client111', '89370019090');
 
 CREATE TABLE subscription
 (
@@ -26,9 +19,6 @@ CREATE TABLE subscription
     PRIMARY KEY (id)
 );
 
-insert into subscription (id, title, price, description)
-values (1, 'title1', 34845, 'Абонемент1');
-
 CREATE TABLE coach
 (
     id   serial,
@@ -36,9 +26,6 @@ CREATE TABLE coach
 
     PRIMARY KEY (id)
 );
-
-insert into coach (name)
-values ('Coach1');
 
 CREATE TABLE request_fit
 (
@@ -53,26 +40,12 @@ CREATE TABLE request_fit
     primary key (id)
 );
 
-
-
-insert into request_fit(title, sub_id, coach_id, phone_number)
-values ('title111', 1, 1, '89370019090');
-
-insert into request_fit(title, sub_id, coach_id, phone_number)
-values ('абонемент129', 1, 1, 89205783624);
-
-drop table request_fit;
-
 CREATE TABLE manager
 (
     id   serial,
     name varchar,
     PRIMARY KEY (id)
 );
-
-drop table manager;
-
-CREATE SEQUENCE hibernate_sequence START 1;
 
 
 
