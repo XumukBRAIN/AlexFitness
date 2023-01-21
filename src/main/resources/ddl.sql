@@ -5,10 +5,10 @@ CREATE TABLE client
     phone_number    varchar not null unique,
     coach           int references coach (id),
     subscription_id integer references subscription (id),
+    balance         decimal,
     email           varchar not null unique,
     PRIMARY KEY (id)
 );
-
 
 CREATE TABLE subscription
 (
@@ -23,7 +23,6 @@ CREATE TABLE coach
 (
     id   serial,
     name varchar,
-
     PRIMARY KEY (id)
 );
 
@@ -36,7 +35,7 @@ CREATE TABLE request_fit
     coach_id     integer references coach (id),
     phone_number varchar,
     is_approved  boolean   default false,
-    email        varchar references client (email),
+    email        varchar,
     primary key (id)
 );
 
@@ -47,13 +46,12 @@ CREATE TABLE manager
     PRIMARY KEY (id)
 );
 
-create table shedlock
+CREATE TABLE accountant
 (
-    name       varchar(64)  not null,
-    lock_until TIMESTAMP(3) not null,
-    locked_at  TIMESTAMP(3) not null default current_timestamp(3),
-    locked_by  varchar(255) not null,
-    primary key (name)
+    id integer,
+    name varchar,
+    balance decimal,
+    primary key (id)
 );
 
 
