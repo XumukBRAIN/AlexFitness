@@ -10,6 +10,7 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
+
     @Value("${fitness.mail.host}")
     private String host;
     @Value("${fitness.mail.username}")
@@ -35,4 +36,5 @@ public class MailConfig {
 
         return mailSender;
     }
+
 }

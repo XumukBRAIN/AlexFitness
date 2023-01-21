@@ -5,7 +5,6 @@ public class ManagerDTO {
     private Integer ManagerId;
     private String ManagerName;
 
-
     public ManagerDTO(Integer managerId, String managerName) {
         ManagerId = managerId;
         ManagerName = managerName;
@@ -26,4 +25,5 @@ public class ManagerDTO {
     public void setManagerName(String managerName) {
         ManagerName = managerName;
     }
+
 }

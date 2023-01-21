@@ -17,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/client")
 public class ClientController {
+
     private final ClientService clientService;
     private final ClientMapper clientMapper;
 
@@ -56,6 +57,5 @@ public class ClientController {
     public void payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
         clientService.payClient(phoneNumber, money);
     }
-
 
 }

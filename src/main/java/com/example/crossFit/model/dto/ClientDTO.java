@@ -69,4 +69,5 @@ public class ClientDTO {
     public void setClientEmail(String clientEmail) {
         this.clientEmail = clientEmail;
     }
+
 }

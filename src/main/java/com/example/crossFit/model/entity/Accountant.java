@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Entity
 @Table
 public class Accountant {
+
     @Id
     private Integer id;
     private String name;

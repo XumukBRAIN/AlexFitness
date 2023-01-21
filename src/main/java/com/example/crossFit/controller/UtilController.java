@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/util")
 public class UtilController {
+
     private final UtilService utilService;
 
     @Autowired
@@ -25,6 +26,5 @@ public class UtilController {
     public void sendToAll(@RequestBody MessageDTO messageDTO) {
         utilService.sendToAll(messageDTO.getTitle(), messageDTO.getText());
     }
-
 
 }

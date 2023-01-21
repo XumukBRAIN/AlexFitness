@@ -47,4 +47,5 @@ public class SubscriptionDTO {
     public void setSubDescription(String subDescription) {
         this.subDescription = subDescription;
     }
+
 }

@@ -5,12 +5,10 @@ public class CoachDTO {
     private Integer coachId;
     private String coachName;
 
-
     public CoachDTO(Integer coachId, String coachName) {
         this.coachId = coachId;
         this.coachName = coachName;
     }
-
 
     public Integer getCoachId() {
         return coachId;
@@ -27,4 +25,5 @@ public class CoachDTO {
     public void setCoachName(String coachName) {
         this.coachName = coachName;
     }
+
 }
