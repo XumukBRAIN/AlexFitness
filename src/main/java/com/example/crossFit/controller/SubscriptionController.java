@@ -37,4 +37,5 @@ public class SubscriptionController {
         Subscription subscription = subscriptionMapper.toSubscription(subscriptionDTO);
         subscriptionService.createSub(subscription);
     }
+
 }

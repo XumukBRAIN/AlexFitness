@@ -15,6 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/coach")
 public class CoachController {
+
     private final CoachService coachService;
     private final CoachMapper coachMapper;
 

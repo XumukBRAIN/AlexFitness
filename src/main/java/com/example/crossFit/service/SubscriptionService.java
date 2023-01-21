@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class SubscriptionService {
+
     private final SubscriptionRepo subscriptionRepo;
 
     @Autowired
@@ -26,4 +27,5 @@ public class SubscriptionService {
     public void createSub(Subscription subscription) {
         subscriptionRepo.save(subscription);
     }
+
 }

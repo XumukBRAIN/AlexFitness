@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UtilService {
+
     private final RequestFitService requestFitService;
     private final ClientRepo clientRepo;
     private static final String SUBJECT = "АКЦИЯ!";
@@ -31,7 +32,6 @@ public class UtilService {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), SUBJECT, TEXT)
         );
-
     }
 
     /**
@@ -46,5 +46,6 @@ public class UtilService {
                 requestFitService.sendMessage(client.getEmail(), title, text)
         );
     }
+
 }
 

@@ -55,4 +55,5 @@ public class RequestFitDTO {
     public void setRequestFitPhoneNumber(String requestFitPhoneNumber) {
         this.requestFitPhoneNumber = requestFitPhoneNumber;
     }
+
 }

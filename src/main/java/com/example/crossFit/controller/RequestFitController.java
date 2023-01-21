@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientRequestFit")
 public class RequestFitController {
+
     private final RequestFitService requestFitService;
     private final RequestFitMapper requestFitMapper;
 
@@ -62,7 +63,6 @@ public class RequestFitController {
     public void subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
         requestFitService.subscriptionPayment(money, email);
     }
-
 
 }
 

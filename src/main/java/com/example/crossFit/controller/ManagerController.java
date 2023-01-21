@@ -16,6 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/manager")
 public class ManagerController {
+
     private final ManagerService managerService;
     private final ManagerMapper managerMapper;
 
@@ -45,4 +46,5 @@ public class ManagerController {
         Manager manager = managerMapper.toManager(managerDTO);
         managerService.createManager(manager);
     }
+
 }
