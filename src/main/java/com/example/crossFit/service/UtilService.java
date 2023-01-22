@@ -2,6 +2,8 @@ package com.example.crossFit.service;
 
 import com.example.crossFit.repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +26,8 @@ public class UtilService {
      * fixedDelay 17800000 = рассылка каждые два дня.
      */
     @Transactional
-    // @Scheduled(fixedDelay = 172800000)
-    // @Async
+    @Scheduled(fixedDelay = 172800000)
+    @Async
     public void sendToAllAutomaticDaily() {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), SUBJECT, TEXT)

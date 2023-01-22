@@ -22,7 +22,7 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public Client getVisitor(UUID id) throws EntityNotFoundExeption {
+    public Client getVisitor(UUID id) {
         Client client = clientRepo.findById(id);
         if (client == null) {
             throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND, "Клиент с таким ID не найден");
