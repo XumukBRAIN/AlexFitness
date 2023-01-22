@@ -1,7 +1,6 @@
 package com.example.crossFit.controller;
 
 import com.example.crossFit.config.SwaggerConfig;
-import com.example.crossFit.exceptions.ClientIsRegisteredException;
 import com.example.crossFit.model.dto.ClientDTO;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.mapStruct.ClientMapper;
