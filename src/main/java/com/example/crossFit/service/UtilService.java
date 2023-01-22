@@ -26,8 +26,6 @@ public class UtilService {
      * fixedDelay 17800000 = рассылка каждые два дня.
      */
     @Transactional
-    @Scheduled(fixedDelay = 172800000)
-    @Async
     public void sendToAllAutomaticDaily() {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), SUBJECT, TEXT)
