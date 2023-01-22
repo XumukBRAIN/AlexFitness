@@ -34,6 +34,7 @@ public class RequestFitController {
         requestFitService.createRequest(requestFit);
     }
 
+    @ApiOperation("Метод для поиска всех неподтвержденных заявок ")
     @GetMapping("/notApproved")
     public List<RequestFitDTO> findNotApprovedRequests() {
         List<RequestFit> listRequestFit = requestFitService.findNotApprovedRequests();
@@ -59,6 +60,7 @@ public class RequestFitController {
         requestFitService.approve(phoneNumber);
     }
 
+    @ApiOperation("Метод для оплаты абонемента")
     @PatchMapping("/paySub")
     public void subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
         requestFitService.subscriptionPayment(money, email);

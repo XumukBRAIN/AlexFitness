@@ -1,6 +1,6 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exeptions.EntityNotFoundExeption;
+import com.example.crossFit.exeptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.repository.CoachRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class CoachService {
     public Coach findByName(String name) {
         Coach coach = coachRepo.findByName(name);
         if (coach == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Тренер с таким именем не найден в базе");
         }
         return coach;

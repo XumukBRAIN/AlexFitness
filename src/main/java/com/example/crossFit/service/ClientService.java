@@ -1,7 +1,7 @@
 package com.example.crossFit.service;
 
 import com.example.crossFit.exeptions.EntityAlreadyIsRegistered;
-import com.example.crossFit.exeptions.EntityNotFoundExeption;
+import com.example.crossFit.exeptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ClientService {
     public Client getVisitor(UUID id) {
         Client client = clientRepo.findById(id);
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND, "Клиент с таким ID не найден");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "Клиент с таким ID не найден");
         }
         return client;
     }
@@ -35,7 +35,7 @@ public class ClientService {
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Клиент с таким номером телефона не найден");
         }
         return client;
@@ -58,7 +58,7 @@ public class ClientService {
     public void deleteClient(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Клиент с таким номером телефона не зарегистрирован в базе");
         }
         clientRepo.delete(client);
@@ -68,7 +68,7 @@ public class ClientService {
     public void payClient(String phoneNumber, BigDecimal money) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Клиент с таким номером телефона не найден в базе");
         }
         client.setBalance(client.getBalance().add(money));

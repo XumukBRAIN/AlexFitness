@@ -34,12 +34,12 @@ public class SwaggerConfig {
     }
 
     public ApiInfo apiInfo() {
-        return new ApiInfo("Alex Fitness Api",
+        return new ApiInfo("CrossFit Api",
                 "Some custom description of API",
                 "Spring Boot - 2.7.7",
-                "Terms of service",
+                "https://github.com/XumukBRAIN/CrossFit#readme",
                 new Contact("Ivan Kudryashov", "live:.cid.f25a1ae711d2391a", "kudryashov.id24@gmail.com"),
-                "License of API", "API license URL",
+                "License of API", "https://swagger.io/docs/",
                 Collections.emptyList());
     }
 
