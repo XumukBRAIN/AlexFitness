@@ -1,5 +1,7 @@
 package com.example.crossFit.controller;
 
+import com.example.crossFit.config.SwaggerConfig;
+import com.example.crossFit.exceptions.ClientIsRegisteredException;
 import com.example.crossFit.model.dto.ClientDTO;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.mapStruct.ClientMapper;
@@ -12,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Api("Контроллер для клиента")
 @RestController
 @RequestMapping("/client")
+@Api(tags = SwaggerConfig.CLIENT_TAG)
 public class ClientController {
 
     private final ClientService clientService;

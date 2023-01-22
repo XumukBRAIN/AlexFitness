@@ -16,6 +16,13 @@ import java.util.Collections;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    public static final String CLIENT_TAG = "Контроллер для работы с клиентами";
+    public static final String COACH_TAG = "Контроллер для работы с тренерами";
+    public static final String MANAGER_TAG = "Контроллер для работы с менеджерами";
+    public static final String REQUEST_FIT_TAG = "Контроллер для работы с заявками";
+    public static final String SUBSCRIPTION_TAG = "Контроллер для работы с абонементами";
+    public static final String UTIL_TAG = "Контроллер для утилит";
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

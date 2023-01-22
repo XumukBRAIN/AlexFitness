@@ -1,6 +1,6 @@
 package com.example.crossFit.controller;
 
-
+import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.ManagerDTO;
 import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.model.mapStruct.ManagerMapper;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Api("Контроллер для менеджера")
 @RestController
 @RequestMapping("/manager")
+@Api(tags = SwaggerConfig.MANAGER_TAG)
 public class ManagerController {
 
     private final ManagerService managerService;
