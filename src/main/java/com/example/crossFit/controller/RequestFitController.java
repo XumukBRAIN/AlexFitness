@@ -1,6 +1,6 @@
 package com.example.crossFit.controller;
 
-
+import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.RequestFitDTO;
 import com.example.crossFit.model.entity.RequestFit;
 import com.example.crossFit.model.mapStruct.RequestFitMapper;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Api("Контроллер для заявок на абонемент и тренера")
 @RestController
 @RequestMapping("/clientRequestFit")
+@Api(tags = SwaggerConfig.REQUEST_FIT_TAG)
 public class RequestFitController {
 
     private final RequestFitService requestFitService;

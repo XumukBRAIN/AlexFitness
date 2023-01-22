@@ -1,5 +1,6 @@
 package com.example.crossFit.controller;
 
+import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.SubscriptionDTO;
 import com.example.crossFit.model.entity.Subscription;
 import com.example.crossFit.model.mapStruct.SubscriptionMapper;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("Контроллер для абонемента")
 @RestController
 @RequestMapping("/subs")
+@Api(tags = SwaggerConfig.SUBSCRIPTION_TAG)
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;

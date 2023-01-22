@@ -1,5 +1,6 @@
 package com.example.crossFit.controller;
 
+import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.CoachDTO;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.model.mapStruct.CoachMapper;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Api("Контроллер для тренера")
 @RestController
 @RequestMapping("/coach")
+@Api(tags = SwaggerConfig.COACH_TAG)
 public class CoachController {
 
     private final CoachService coachService;

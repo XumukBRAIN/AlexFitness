@@ -1,6 +1,7 @@
 package com.example.crossFit.controller;
 
 
+import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.MessageDTO;
 import com.example.crossFit.service.UtilService;
 import io.swagger.annotations.Api;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("Контроллер для утилит")
 @RestController
 @RequestMapping("/util")
+@Api(tags = SwaggerConfig.UTIL_TAG)
 public class UtilController {
 
     private final UtilService utilService;
