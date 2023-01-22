@@ -1,6 +1,5 @@
 package com.example.crossFit.service;
 
-
 import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.repository.ManagerRepo;
 import org.springframework.beans.factory.annotation.Autowired;

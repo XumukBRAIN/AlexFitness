@@ -1,7 +1,7 @@
 package com.example.crossFit.service;
 
 
-import com.example.crossFit.exeptions.EntityNotFoundExeption;
+import com.example.crossFit.exeptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Accountant;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.RequestFit;
@@ -55,7 +55,7 @@ public class RequestFitService {
     public RequestFit findByPhoneNumber(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Заявка с указанным номером телефона не найдена");
         }
         return requestFit;
@@ -65,7 +65,7 @@ public class RequestFitService {
     public List<RequestFit> findNotApprovedRequests() {
         List<RequestFit> requestFitsList = requestFitRepo.findAllByIsApprovedNull();
         if (requestFitsList.isEmpty()) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Новых заявок на абонемент не найдено");
         }
         return requestFitsList;
@@ -75,7 +75,7 @@ public class RequestFitService {
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Заявка с указанным номером телефона не найдена");
         }
         requestFit.setApproved(false);
@@ -89,13 +89,13 @@ public class RequestFitService {
     public void approve(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Заявка с указанным номером телефона не найдена");
         }
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
 
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Клиент с указанным номером телефона не найден в базе");
         }
 
@@ -114,7 +114,7 @@ public class RequestFitService {
     public void subscriptionPayment(BigDecimal money, String email) {
         Client client = clientRepo.findByEmail(email);
         if (client == null) {
-            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Клиент с указанной электронной почтой не найден в базе");
         }
         client.setBalance(client.getBalance().subtract(money));
