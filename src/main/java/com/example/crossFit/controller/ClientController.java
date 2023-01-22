@@ -1,6 +1,5 @@
 package com.example.crossFit.controller;
 
-import com.example.crossFit.exceptions.ClientIsRegisteredException;
 import com.example.crossFit.model.dto.ClientDTO;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.mapStruct.ClientMapper;
@@ -42,12 +41,12 @@ public class ClientController {
 
     @ApiOperation("Метод для добавления клиента")
     @PostMapping("/registerClient")
-    public void registerVisitor(@RequestBody ClientDTO clientDTO) throws ClientIsRegisteredException {
+    public void registerVisitor(@RequestBody ClientDTO clientDTO) {
         clientService.registerVisitor(clientMapper.toClient(clientDTO));
     }
 
     @ApiOperation("Метод для удаления клиента из базы данных")
-    @PostMapping("/deleteClient")
+    @DeleteMapping("/deleteClient")
     public void deleteClient(@RequestParam String phoneNumber) {
         clientService.deleteClient(phoneNumber);
     }

@@ -1,9 +1,11 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exceptions.ClientIsRegisteredException;
+import com.example.crossFit.exeptions.EntityAlreadyIsRegistered;
+import com.example.crossFit.exeptions.EntityNotFoundExeption;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,28 +22,34 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public Client getVisitor(UUID id) {
+    public Client getVisitor(UUID id) throws EntityNotFoundExeption {
         Client client = clientRepo.findById(id);
         if (client == null) {
-            throw new RuntimeException("Клиент с таким ID не найден");
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND, "Клиент с таким ID не найден");
         }
         return client;
     }
 
+
     @Transactional(readOnly = true)
     public Client findByPhoneNumber(String phoneNumber) {
-        return clientRepo.findByPhoneNumber(phoneNumber);
+        Client client = clientRepo.findByPhoneNumber(phoneNumber);
+        if (client == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Клиент с таким номером телефона не найден");
+        }
+        return client;
     }
 
     @Transactional
-    public void registerVisitor(Client client) throws ClientIsRegisteredException {
+    public void registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
-            throw new ClientIsRegisteredException("Клиент с номером телефона: "
-                    + client.getPhoneNumber() + " уже зарегистрирован");
+            throw new EntityAlreadyIsRegistered(HttpStatus.BAD_REQUEST,
+                    "Клиент с таким номером телефона уже зарегистрирован");
         }
         if (clientRepo.findByEmail(client.getEmail()) != null) {
-            throw new ClientIsRegisteredException("Клиент с email: "
-                    + client.getEmail() + " уже зарегистрирован");
+            throw new EntityAlreadyIsRegistered(HttpStatus.BAD_REQUEST,
+                    "Клиент с такой электронной почтой уже зарегистрирован");
         }
         clientRepo.save(client);
     }
@@ -49,16 +57,23 @@ public class ClientService {
     @Transactional
     public void deleteClient(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
+        if (client == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Клиент с таким номером телефона не зарегистрирован в базе");
+        }
         clientRepo.delete(client);
     }
 
     @Transactional
     public void payClient(String phoneNumber, BigDecimal money) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
+        if (client == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Клиент с таким номером телефона не найден в базе");
+        }
         client.setBalance(client.getBalance().add(money));
 
         clientRepo.save(client);
-
 
     }
 
