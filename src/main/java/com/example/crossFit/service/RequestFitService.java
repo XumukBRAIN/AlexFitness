@@ -1,6 +1,7 @@
 package com.example.crossFit.service;
 
 
+import com.example.crossFit.exeptions.EntityNotFoundExeption;
 import com.example.crossFit.model.entity.Accountant;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.RequestFit;
@@ -8,6 +9,7 @@ import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.RequestFitRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -51,35 +53,50 @@ public class RequestFitService {
 
     @Transactional(readOnly = true)
     public RequestFit findByPhoneNumber(String phoneNumber) {
-        return requestFitRepo.findByPhoneNumber(phoneNumber);
+        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
+        if (requestFit == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
+        }
+        return requestFit;
     }
 
     @Transactional(readOnly = true)
     public List<RequestFit> findNotApprovedRequests() {
-        return requestFitRepo.findAllByIsApprovedNull();
+        List<RequestFit> requestFitsList = requestFitRepo.findAllByIsApprovedNull();
+        if (requestFitsList.isEmpty()) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Новых заявок на абонемент не найдено");
+        }
+        return requestFitsList;
     }
 
 
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new RuntimeException("Заявка с таким номером телефона не найдена");
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
         }
         requestFit.setApproved(false);
+
         requestFitRepo.save(requestFit);
 
-        sendMessage(requestFit.getEmail(), "Отказ", "Ваша заявка отклонена!!!!!!!!");
+        sendMessage(requestFit.getEmail(), "Отказ", "К сожалению, Ваша заявка отклонена!");
     }
 
     @Transactional
     public void approve(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new RuntimeException("Заявка с таким номером телефона не найдена");
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
         }
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
+
         if (client == null) {
-            throw new RuntimeException("Клиент с таким номером телефона не найден");
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Клиент с указанным номером телефона не найден в базе");
         }
 
         requestFit.setApproved(true);
@@ -89,13 +106,17 @@ public class RequestFitService {
         client.setSubscriptionId(requestFit.getSubId());
         clientRepo.save(client);
 
-        sendMessage(client.getEmail(), "Одобрено", "Ваша заявка принята!");
+        sendMessage(client.getEmail(), "Одобрено", "Одобрено! Ваша заявка ждет оплаты");
 
     }
 
     @Transactional
     public void subscriptionPayment(BigDecimal money, String email) {
         Client client = clientRepo.findByEmail(email);
+        if (client == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Клиент с указанной электронной почтой не найден в базе");
+        }
         client.setBalance(client.getBalance().subtract(money));
         clientRepo.save(client);
 
