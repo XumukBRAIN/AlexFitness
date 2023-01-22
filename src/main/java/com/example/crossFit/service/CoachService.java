@@ -1,8 +1,10 @@
 package com.example.crossFit.service;
 
+import com.example.crossFit.exeptions.EntityNotFoundExeption;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.repository.CoachRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,12 @@ public class CoachService {
 
     @Transactional(readOnly = true)
     public Coach findByName(String name) {
-        return coachRepo.findByName(name);
+        Coach coach = coachRepo.findByName(name);
+        if (coach == null) {
+            throw new EntityNotFoundExeption(HttpStatus.NOT_FOUND,
+                    "Тренер с таким именем не найден в базе");
+        }
+        return coach;
     }
 
     @Transactional
