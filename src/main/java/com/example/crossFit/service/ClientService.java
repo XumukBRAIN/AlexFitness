@@ -1,7 +1,7 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exeptions.EntityAlreadyIsRegistered;
-import com.example.crossFit.exeptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
+import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +44,11 @@ public class ClientService {
     @Transactional
     public void registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
-            throw new EntityAlreadyIsRegistered(HttpStatus.BAD_REQUEST,
+            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
                     "Клиент с таким номером телефона уже зарегистрирован");
         }
         if (clientRepo.findByEmail(client.getEmail()) != null) {
-            throw new EntityAlreadyIsRegistered(HttpStatus.BAD_REQUEST,
+            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
                     "Клиент с такой электронной почтой уже зарегистрирован");
         }
         clientRepo.save(client);

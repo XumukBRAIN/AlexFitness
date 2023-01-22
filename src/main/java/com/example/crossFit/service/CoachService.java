@@ -1,6 +1,6 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exeptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.repository.CoachRepo;
 import org.springframework.beans.factory.annotation.Autowired;
