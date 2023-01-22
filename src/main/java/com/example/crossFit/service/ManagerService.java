@@ -1,8 +1,10 @@
 package com.example.crossFit.service;
 
+import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.repository.ManagerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,5 +32,15 @@ public class ManagerService {
     @Transactional(readOnly = true)
     public Manager findByName(String name) {
         return managerRepo.findByName(name);
+    }
+
+    @Transactional
+    public void deleteManager(Integer id) {
+        Optional<Manager> manager = managerRepo.findById(id);
+        if (!manager.isPresent()) {
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Менеджер с таким ID не найден в базе");
+        }
+        managerRepo.deleteById(id);
     }
 }

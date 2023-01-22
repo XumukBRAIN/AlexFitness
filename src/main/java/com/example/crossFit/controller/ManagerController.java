@@ -47,4 +47,10 @@ public class ManagerController {
         managerService.createManager(manager);
     }
 
+    @ApiOperation("Метод для удаления менеджера из базы")
+    @DeleteMapping("/deleteManager")
+    public void deleteManager(@RequestParam Integer id) {
+        managerService.deleteManager(id);
+    }
+
 }

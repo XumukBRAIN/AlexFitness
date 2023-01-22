@@ -15,12 +15,11 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(Integer id, String name) {
-        this.id = id;
+    public Manager(String name) {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

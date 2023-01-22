@@ -71,7 +71,13 @@ public class RequestFitService {
         return requestFitsList;
     }
 
+    @Transactional
+    public void deleteRequestFit(String phoneNumber) {
+        findByPhoneNumber(phoneNumber);
+        requestFitRepo.deleteByPhoneNumber(phoneNumber);
+    }
 
+    @Transactional
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
@@ -135,5 +141,6 @@ public class RequestFitService {
 
         mailSender.send(mailMessage);
     }
+
 
 }
