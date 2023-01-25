@@ -13,4 +13,7 @@ public interface RequestFitRepo extends JpaRepository<RequestFit, Integer> {
 
     RequestFit findByPhoneNumber(String phoneNumber);
 
+    void deleteByPhoneNumber(String phoneNumber);
+
+
 }

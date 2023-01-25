@@ -46,4 +46,10 @@ public class CoachController {
         coachService.createCoach(coach);
     }
 
+    @ApiOperation("Метод для удаления тренера")
+    @DeleteMapping("/deleteCoach")
+    public void deleteCoach(@RequestParam Integer id) {
+        coachService.deleteCoach(id);
+    }
+
 }

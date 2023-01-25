@@ -39,4 +39,10 @@ public class SubscriptionController {
         subscriptionService.createSub(subscription);
     }
 
+    @ApiOperation("Метод для удаления абонемента по ID")
+    @DeleteMapping("/deleteSub")
+    public void deleteSub(@RequestParam Integer id) {
+        subscriptionService.deleteSub(id);
+    }
+
 }

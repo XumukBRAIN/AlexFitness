@@ -34,6 +34,12 @@ public class RequestFitController {
         requestFitService.createRequest(requestFit);
     }
 
+    @ApiOperation("Метод для удаления заявки на абонемент по номеру телефона клиента")
+    @DeleteMapping("/deleteRequestFit")
+    public void deleteRequestFit(@RequestParam String phoneNumber) {
+        requestFitService.deleteRequestFit(phoneNumber);
+    }
+
     @ApiOperation("Метод для поиска всех неподтвержденных заявок ")
     @GetMapping("/notApproved")
     public List<RequestFitDTO> findNotApprovedRequests() {

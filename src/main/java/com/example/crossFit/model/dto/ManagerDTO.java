@@ -2,28 +2,28 @@ package com.example.crossFit.model.dto;
 
 public class ManagerDTO {
 
-    private Integer ManagerId;
-    private String ManagerName;
+    private Integer managerId;
+    private String managerName;
 
     public ManagerDTO(Integer managerId, String managerName) {
-        ManagerId = managerId;
-        ManagerName = managerName;
+        this.managerId = managerId;
+        this.managerName = managerName;
     }
 
     public Integer getManagerId() {
-        return ManagerId;
+        return managerId;
     }
 
     public void setManagerId(Integer managerId) {
-        ManagerId = managerId;
+        this.managerId = managerId;
     }
 
     public String getManagerName() {
-        return ManagerName;
+        return managerName;
     }
 
     public void setManagerName(String managerName) {
-        ManagerName = managerName;
+        this.managerName = managerName;
     }
 
 }

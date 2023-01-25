@@ -1,7 +1,7 @@
 package com.example.crossFit.service;
 
 
-import com.example.crossFit.exeptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Accountant;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.RequestFit;
@@ -71,7 +71,13 @@ public class RequestFitService {
         return requestFitsList;
     }
 
+    @Transactional
+    public void deleteRequestFit(String phoneNumber) {
+        findByPhoneNumber(phoneNumber);
+        requestFitRepo.deleteByPhoneNumber(phoneNumber);
+    }
 
+    @Transactional
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
@@ -135,5 +141,6 @@ public class RequestFitService {
 
         mailSender.send(mailMessage);
     }
+
 
 }
