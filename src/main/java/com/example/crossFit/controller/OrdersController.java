@@ -26,12 +26,12 @@ public class OrdersController {
         this.ordersMapper = ordersMapper;
     }
 
-    @ApiOperation("Метод для создания интернет-заказа")
+   /* @ApiOperation("Метод для создания интернет-заказа")
     @PostMapping("/createOrders")
     public void createOrders(@RequestBody OrdersDTO ordersDTO) {
         Orders orders = ordersMapper.toOrders(ordersDTO);
         ordersService.createOrders(orders);
-    }
+    }*/
 
     @ApiOperation("Метод для удаления заказа")
     @DeleteMapping("/deleteOrders")

@@ -1,6 +1,5 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
 import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.OrdersRepo;
@@ -22,14 +21,6 @@ public class OrdersService {
         this.ordersRepo = ordersRepo;
     }
 
-    @Transactional
-    public void createOrders(Orders orders) {
-        Optional<Orders> o = ordersRepo.findById(orders.getId());
-        if (!o.isPresent()) {
-            ordersRepo.save(orders);
-        } else throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
-                "Заказ с таким ID уже есть в базе");
-    }
 
     @Transactional
     public void deleteOrders(Integer id) {
@@ -45,4 +36,6 @@ public class OrdersService {
     public List<Orders> showMyOrders(UUID id) {
         return ordersRepo.findByClientId(id);
     }
+
 }
+

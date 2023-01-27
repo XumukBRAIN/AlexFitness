@@ -58,5 +58,10 @@ public class ClientController {
         clientService.payClient(phoneNumber, money);
     }
 
+    @PostMapping("/clientCreateOrders")
+    public void createClientOrders(@RequestParam UUID uuid,
+                                   @RequestParam Integer id, @RequestParam String title) {
+        clientService.createMyOrders(uuid, id, title);
+    }
 
 }

@@ -3,22 +3,31 @@ package com.example.crossFit.service;
 import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
 import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Client;
+import com.example.crossFit.model.entity.Item;
+import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
+import com.example.crossFit.repository.ItemRepo;
+import com.example.crossFit.repository.OrdersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ClientService {
     private final ClientRepo clientRepo;
+    private final OrdersRepo ordersRepo;
+    private final ItemRepo itemRepo;
 
     @Autowired
-    public ClientService(ClientRepo clientRepo) {
+    public ClientService(ClientRepo clientRepo, OrdersRepo ordersRepo, ItemRepo itemRepo) {
         this.clientRepo = clientRepo;
+        this.ordersRepo = ordersRepo;
+        this.itemRepo = itemRepo;
     }
 
     @Transactional(readOnly = true)
@@ -77,5 +86,27 @@ public class ClientService {
 
     }
 
+    @Transactional
+    public void createMyOrders(UUID uuid, Integer id, String title) {
+        Client client = clientRepo.findById(uuid);
+        if (client == null) {
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Клиент с таким ID не найден");
+        }
+
+        Orders orders = new Orders();
+        orders.setClientId(uuid);
+
+        Optional<Item> item = itemRepo.findById(id);
+        if (!item.isPresent()) {
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Товар не найден");
+        }
+        orders.setTitle(title);
+        orders.setSum(item.get().getPrice());
+
+        ordersRepo.save(orders);
+
+    }
 
 }
