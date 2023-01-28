@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrdersService {
@@ -33,8 +32,13 @@ public class OrdersService {
     }
 
     @Transactional(readOnly = true)
-    public List<Orders> showMyOrders(UUID id) {
-        return ordersRepo.findByClientId(id);
+    public List<Orders> showMyOrders(String phoneNumber) {
+        List<Orders> orders = ordersRepo.findByPhoneNumber(phoneNumber);
+        if (orders.isEmpty()) {
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "По данному телефону не найдено ни одного заказа");
+        }
+        return orders;
     }
 
 }

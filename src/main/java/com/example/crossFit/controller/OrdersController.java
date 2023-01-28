@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Api(SwaggerConfig.ORDERS_TAG)
 @RestController
@@ -41,8 +40,8 @@ public class OrdersController {
 
     @ApiOperation("Метод для поиска всех заказов по ID клиента")
     @GetMapping("/myOrders")
-    public List<OrdersDTO> showMyOrders(@RequestParam UUID id) {
-        List<Orders> orders = ordersService.showMyOrders(id);
+    public List<OrdersDTO> showMyOrders(@RequestParam String phoneNumber) {
+        List<Orders> orders = ordersService.showMyOrders(phoneNumber);
         return ordersMapper.toOrdersListDTO(orders);
 
     }

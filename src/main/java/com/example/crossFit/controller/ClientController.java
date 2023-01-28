@@ -59,9 +59,9 @@ public class ClientController {
     }
 
     @PostMapping("/clientCreateOrders")
-    public void createClientOrders(@RequestParam UUID uuid,
+    public void createClientOrders(@RequestParam String phoneNumber,
                                    @RequestParam Integer id, @RequestParam String title) {
-        clientService.createMyOrders(uuid, id, title);
+        clientService.createMyOrders(phoneNumber, id, title);
     }
 
 }

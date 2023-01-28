@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class Orders {
     private Integer number;
     private String title;
     private BigDecimal sum;
+    private String phoneNumber;
     @CreationTimestamp
     private LocalDateTime reqDate;
     @JoinColumn(name = "client_id")
@@ -27,10 +29,10 @@ public class Orders {
     @JoinTable(name = "orders_item",
             joinColumns = @JoinColumn(name = "orders_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     public Orders(Integer id, Integer number, String title, BigDecimal sum, UUID clientId,
-                  List<Item> items, LocalDateTime reqDate) {
+                  List<Item> items, LocalDateTime reqDate, String phoneNumber) {
         this.id = id;
         this.number = number;
         this.title = title;
@@ -38,6 +40,7 @@ public class Orders {
         this.clientId = clientId;
         this.items = items;
         this.reqDate = reqDate;
+        this.phoneNumber = phoneNumber;
     }
 
     public Orders() {
@@ -87,8 +90,8 @@ public class Orders {
         return items;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setItems(Item item) {
+        this.items.add(item);
     }
 
     public LocalDateTime getReqDate() {
@@ -98,4 +101,13 @@ public class Orders {
     public void setReqDate(LocalDateTime reqDate) {
         this.reqDate = reqDate;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 }

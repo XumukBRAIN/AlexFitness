@@ -87,26 +87,40 @@ public class ClientService {
     }
 
     @Transactional
-    public void createMyOrders(UUID uuid, Integer id, String title) {
-        Client client = clientRepo.findById(uuid);
+    public void createMyOrders(String phoneNumber, Integer id, String title) {
+        Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
             throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Клиент с таким ID не найден");
+                    "Клиент с таким номером телефона не найден");
         }
-
-        Orders orders = new Orders();
-        orders.setClientId(uuid);
 
         Optional<Item> item = itemRepo.findById(id);
         if (!item.isPresent()) {
             throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Товар не найден");
         }
-        orders.setTitle(title);
-        orders.setSum(item.get().getPrice());
 
-        ordersRepo.save(orders);
+        Orders o = ordersRepo.findByClientId(client.getId());
+        if (o != null) {
+            o.setItems(item.get());
+            o.setSum(o.getSum().add(item.get().getPrice()));
+        } else {
 
+            Orders orders = new Orders();
+            orders.setClientId(client.getId());
+            orders.setTitle(title);
+            orders.setPhoneNumber(phoneNumber);
+
+            if (orders.getSum() == null) {
+                orders.setSum(BigDecimal.valueOf(0));
+            }
+
+            orders.setSum(orders.getSum().add(item.get().getPrice()));
+            orders.setItems(item.get());
+
+            ordersRepo.save(orders);
+
+        }
     }
-
 }
+
