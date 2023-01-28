@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 
 public class OrdersDTO {
     private Integer ordersId;
-    private Integer ordersNumber;
+    private String ordersNumber;
     private String ordersTitle;
     private BigDecimal ordersSum;
 
-    public OrdersDTO(Integer ordersId, Integer ordersNumber, String ordersTitle, BigDecimal ordersSum) {
+    public OrdersDTO(Integer ordersId, String ordersNumber, String ordersTitle, BigDecimal ordersSum) {
         this.ordersId = ordersId;
         this.ordersNumber = ordersNumber;
         this.ordersTitle = ordersTitle;
@@ -23,11 +23,11 @@ public class OrdersDTO {
         this.ordersId = ordersId;
     }
 
-    public Integer getOrdersNumber() {
+    public String getOrdersNumber() {
         return ordersNumber;
     }
 
-    public void setOrdersNumber(Integer ordersNumber) {
+    public void setOrdersNumber(String ordersNumber) {
         this.ordersNumber = ordersNumber;
     }
 
@@ -46,4 +46,5 @@ public class OrdersDTO {
     public void setOrdersSum(BigDecimal ordersSum) {
         this.ordersSum = ordersSum;
     }
+
 }

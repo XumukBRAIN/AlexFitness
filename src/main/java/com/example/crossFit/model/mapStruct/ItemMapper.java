@@ -5,6 +5,8 @@ import com.example.crossFit.model.entity.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
 
@@ -13,10 +15,14 @@ public interface ItemMapper {
     @Mapping(target = "itemPrice", source = "price")
     ItemDTO toItemDTO(Item item);
 
+    List<ItemDTO> toItemListDTO(List<Item> item);
+
     @Mapping(target = "id", source = "itemId")
     @Mapping(target = "title", source = "itemTitle")
     @Mapping(target = "price", source = "itemPrice")
     Item toItem(ItemDTO itemDTO);
+
+    List<Item> toItemList(List<ItemDTO> itemDTO);
 
 
 }

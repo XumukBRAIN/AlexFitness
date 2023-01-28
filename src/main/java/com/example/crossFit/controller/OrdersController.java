@@ -32,7 +32,7 @@ public class OrdersController {
         ordersService.createOrders(orders);
     }*/
 
-    @ApiOperation("Метод для удаления заказа")
+    @ApiOperation("Метод для удаления заказа по ID заказа")
     @DeleteMapping("/deleteOrders")
     public void deleteOrders(@RequestParam Integer id) {
         ordersService.deleteOrders(id);

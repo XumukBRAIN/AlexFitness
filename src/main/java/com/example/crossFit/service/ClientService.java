@@ -14,11 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ClientService {
+    private Integer countOrders = 11;
+
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
     private final ItemRepo itemRepo;
@@ -110,6 +115,12 @@ public class ClientService {
             orders.setClientId(client.getId());
             orders.setTitle(title);
             orders.setPhoneNumber(phoneNumber);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/");
+            synchronized (this) {
+                orders.setNumber(dateFormat.format(new Date()) + countOrders);
+                countOrders++;
+            }
+
 
             if (orders.getSum() == null) {
                 orders.setSum(BigDecimal.valueOf(0));
@@ -121,6 +132,7 @@ public class ClientService {
             ordersRepo.save(orders);
 
         }
+
     }
 }
 

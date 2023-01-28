@@ -17,7 +17,7 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "orders_id_seq", sequenceName = "ORDERS_ID_SEQ", allocationSize = 1)
     private Integer id;
-    private Integer number;
+    private String number;
     private String title;
     private BigDecimal sum;
     private String phoneNumber;
@@ -31,7 +31,7 @@ public class Orders {
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items = new ArrayList<>();
 
-    public Orders(Integer id, Integer number, String title, BigDecimal sum, UUID clientId,
+    public Orders(Integer id, String number, String title, BigDecimal sum, UUID clientId,
                   List<Item> items, LocalDateTime reqDate, String phoneNumber) {
         this.id = id;
         this.number = number;
@@ -54,11 +54,11 @@ public class Orders {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
