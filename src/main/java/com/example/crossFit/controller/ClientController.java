@@ -58,9 +58,9 @@ public class ClientController {
         clientService.payClient(phoneNumber, money);
     }
 
-    @PostMapping("/clientCreateOrders")
-    public void createClientOrders(@RequestParam String phoneNumber,
-                                   @RequestParam Integer id, @RequestParam String title) {
+    @PostMapping("/orders/create")
+    public void createOrder(@RequestParam String phoneNumber,
+                            @RequestParam Integer id, @RequestParam String title) {
         clientService.createMyOrders(phoneNumber, id, title);
     }
 

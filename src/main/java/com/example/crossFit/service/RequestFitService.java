@@ -62,13 +62,18 @@ public class RequestFitService {
     }
 
     @Transactional(readOnly = true)
-    public List<RequestFit> findNotApprovedRequests() {
+    public List<RequestFit> showAllRequestFitIsNotApprove() {
         List<RequestFit> requestFitsList = requestFitRepo.findAllByIsApprovedNull();
         if (requestFitsList.isEmpty()) {
             throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
                     "Новых заявок на абонемент не найдено");
         }
         return requestFitsList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<RequestFit> findAllRequestFit() {
+        return requestFitRepo.findAll();
     }
 
     @Transactional

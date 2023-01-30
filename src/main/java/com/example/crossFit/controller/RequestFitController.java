@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientRequestFit")
+@RequestMapping("/requestFit")
 @Api(tags = SwaggerConfig.REQUEST_FIT_TAG)
 public class RequestFitController {
 
@@ -28,8 +28,8 @@ public class RequestFitController {
     }
 
     @ApiOperation("Метод для создание заявки на абонемент и тренера")
-    @PostMapping("/createRequestFit")
-    public void createRequest(@RequestBody RequestFitDTO requestFitDTO) {
+    @PostMapping("/create")
+    public void createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {
         RequestFit requestFit = requestFitMapper.toRequestFit(requestFitDTO);
         requestFitService.createRequest(requestFit);
     }
@@ -43,14 +43,14 @@ public class RequestFitController {
     @ApiOperation("Метод для поиска всех неподтвержденных заявок ")
     @GetMapping("/notApproved")
     public List<RequestFitDTO> findNotApprovedRequests() {
-        List<RequestFit> listRequestFit = requestFitService.findNotApprovedRequests();
+        List<RequestFit> listRequestFit = requestFitService.showAllRequestFitIsNotApprove();
         return requestFitMapper.toRequestFitListDTO(listRequestFit);
     }
 
-    @ApiOperation("Метод для поиска всех необработанных заявок на абонемент и тренера")
+    @ApiOperation("Метод для поиска всех заявок на абонемент и тренера")
     @GetMapping("/showRequestFit")
-    public List<RequestFitDTO> showRequestFit() {
-        List<RequestFit> listRequestFit = requestFitService.findNotApprovedRequests();
+    public List<RequestFitDTO> showAllRequestFit() {
+        List<RequestFit> listRequestFit = requestFitService.findAllRequestFit();
         return requestFitMapper.toRequestFitListDTO(listRequestFit);
     }
 
