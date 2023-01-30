@@ -47,7 +47,7 @@ public class RequestFitController {
         return requestFitMapper.toRequestFitListDTO(listRequestFit);
     }
 
-    @ApiOperation("Метод для поиска всех созданных заявок на абонемент и тренера")
+    @ApiOperation("Метод для поиска всех необработанных заявок на абонемент и тренера")
     @GetMapping("/showRequestFit")
     public List<RequestFitDTO> showRequestFit() {
         List<RequestFit> listRequestFit = requestFitService.findNotApprovedRequests();

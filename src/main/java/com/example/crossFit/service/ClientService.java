@@ -9,7 +9,10 @@ import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,22 @@ public class ClientService {
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
     private final ItemRepo itemRepo;
+
+    private final static String SUBJECT = "Ваш заказ создан!";
+    private final static String TEXT = "! Благодарим за выбор нашего магазина! Вашему заказу присвоен номер: ";
+
+    @Value("${fitness.mail.username}")
+    private String mail;
+
+    /**
+     * Сервис по отправке писем
+     */
+    private JavaMailSender mailSender;
+
+    @Autowired(required = false)
+    public void setMailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Autowired
     public ClientService(ClientRepo clientRepo, OrdersRepo ordersRepo, ItemRepo itemRepo) {
@@ -65,6 +84,8 @@ public class ClientService {
             throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
                     "Клиент с такой электронной почтой уже зарегистрирован");
         }
+        client.setBalance(BigDecimal.valueOf(0));
+
         clientRepo.save(client);
     }
 
@@ -112,6 +133,7 @@ public class ClientService {
         } else {
 
             Orders orders = new Orders();
+            orders.setSum(BigDecimal.valueOf(0));
             orders.setClientId(client.getId());
             orders.setTitle(title);
             orders.setPhoneNumber(phoneNumber);
@@ -121,15 +143,19 @@ public class ClientService {
                 countOrders++;
             }
 
-
-            if (orders.getSum() == null) {
-                orders.setSum(BigDecimal.valueOf(0));
-            }
-
             orders.setSum(orders.getSum().add(item.get().getPrice()));
             orders.setItems(item.get());
 
             ordersRepo.save(orders);
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom(mail);
+            mailMessage.setTo(client.getEmail());
+            mailMessage.setSubject(SUBJECT);
+            mailMessage.setText(client.getName() + TEXT + orders.getNumber());
+
+            mailSender.send(mailMessage);
+
 
         }
 
