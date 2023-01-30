@@ -1,6 +1,5 @@
 package com.example.crossFit.model.mapStruct;
 
-
 import com.example.crossFit.model.dto.RequestFitDTO;
 import com.example.crossFit.model.entity.RequestFit;
 import org.mapstruct.Mapper;
@@ -20,7 +19,6 @@ public interface RequestFitMapper {
 
     List<RequestFitDTO> toRequestFitListDTO(List<RequestFit> requestFit);
 
-
     @Mapping(target = "id", source = "requestFitId")
     @Mapping(target = "title", source = "requestFitTitle")
     @Mapping(target = "subId", source = "requestFitSubId")
@@ -28,6 +26,6 @@ public interface RequestFitMapper {
     @Mapping(target = "phoneNumber", source = "requestFitPhoneNumber")
     RequestFit toRequestFit(RequestFitDTO requestFitDTO);
 
-
     List<RequestFit> toRequestFitList(List<RequestFitDTO> requestFitDTO);
+
 }

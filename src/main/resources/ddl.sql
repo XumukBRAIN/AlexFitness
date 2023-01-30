@@ -54,6 +54,8 @@ CREATE TABLE accountant
     primary key (id)
 );
 
+CREATE SEQUENCE orders_number_seq start with 1;
+
 
 
 

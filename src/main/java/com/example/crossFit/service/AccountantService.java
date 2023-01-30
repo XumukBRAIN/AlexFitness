@@ -24,4 +24,5 @@ public class AccountantService {
     public void save(Accountant accountant) {
         accountantRepo.save(accountant);
     }
+
 }

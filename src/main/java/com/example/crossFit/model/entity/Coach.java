@@ -26,7 +26,7 @@ public class Coach {
     public Coach() {
     }
 
-    public Coach(Integer id, String name, List<Client> clients, List<RequestFit> requestFits) {
+    public Coach(String name, List<Client> clients, List<RequestFit> requestFits) {
         this.name = name;
         this.clients = clients;
         this.requestFits = requestFits;
@@ -48,7 +48,6 @@ public class Coach {
         this.name = name;
     }
 
-
     public List<Client> getClients() {
         return clients;
     }
@@ -64,4 +63,5 @@ public class Coach {
     public void setRequestFits(List<RequestFit> requestFits) {
         this.requestFits = requestFits;
     }
+
 }

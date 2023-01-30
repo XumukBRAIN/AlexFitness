@@ -22,7 +22,6 @@ public class Subscription {
     private BigDecimal price;
     private String description;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "subscriptionId")
     private List<Client> clients;
@@ -75,7 +74,6 @@ public class Subscription {
         this.description = description;
     }
 
-
     public List<Client> getClients() {
         return clients;
     }
@@ -91,4 +89,5 @@ public class Subscription {
     public void setRequestFits(List<RequestFit> requestFits) {
         this.requestFits = requestFits;
     }
+
 }

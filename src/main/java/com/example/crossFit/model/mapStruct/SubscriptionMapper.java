@@ -19,4 +19,5 @@ public interface SubscriptionMapper {
     @Mapping(target = "price", source = "subPrice")
     @Mapping(target = "description", source = "subDescription")
     Subscription toSubscription(SubscriptionDTO subscriptionDTO);
+
 }
