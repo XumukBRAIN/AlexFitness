@@ -1,11 +1,9 @@
 package com.example.crossFit.model.entity;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name = "request_fit")
@@ -103,4 +101,5 @@ public class RequestFit {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

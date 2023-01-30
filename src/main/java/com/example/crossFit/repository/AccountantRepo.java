@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface AccountantRepo extends JpaRepository<Accountant, Integer> {
 
     Accountant findByName(String name);
+
 }

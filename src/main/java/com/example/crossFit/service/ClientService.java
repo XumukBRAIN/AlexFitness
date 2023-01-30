@@ -8,6 +8,7 @@ import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,14 +27,16 @@ import java.util.UUID;
 
 @Service
 public class ClientService {
-    private Integer countOrders = 11;
 
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
     private final ItemRepo itemRepo;
 
-    private final static String SUBJECT = "Ваш заказ создан!";
+    private final static String SUBJECT = "Ваш заказ c номером создан!";
     private final static String TEXT = "! Благодарим за выбор нашего магазина! Вашему заказу присвоен номер: ";
+    private final static String URL = "jdbc:postgresql://containers-us-west-182.railway.app:6020/railway";
+    private final static String USERNAME = "postgres";
+    private final static String PASSWORD = "ewjAAeTjhj8XsUgEJNDe";
 
     @Value("${fitness.mail.username}")
     private String mail;
@@ -137,10 +141,22 @@ public class ClientService {
             orders.setClientId(client.getId());
             orders.setTitle(title);
             orders.setPhoneNumber(phoneNumber);
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/");
-            synchronized (this) {
-                orders.setNumber(dateFormat.format(new Date()) + countOrders);
-                countOrders++;
+            String number;
+            try {
+                Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("select nextval('orders_number_seq')");
+
+                if (rs.next()) {
+                    number = dateFormat.format(new Date()) + StringUtils.leftPad(String.valueOf(rs.getLong("nextval")), 4, "0");
+                    orders.setNumber(number);
+                }
+
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
 
             orders.setSum(orders.getSum().add(item.get().getPrice()));
@@ -155,7 +171,6 @@ public class ClientService {
             mailMessage.setText(client.getName() + TEXT + orders.getNumber());
 
             mailSender.send(mailMessage);
-
 
         }
 
