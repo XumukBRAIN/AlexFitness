@@ -34,7 +34,7 @@ public class ManagerController {
     }
 
     @ApiOperation("Метод для поиска менеджера по имени")
-    @GetMapping("/getOneByName")
+    @GetMapping("/getByName")
     public ManagerDTO getManagerByName(@RequestParam String name) {
         Manager manager = managerService.findByName(name);
         return managerMapper.toManagerDTO(manager);

@@ -3,6 +3,7 @@ package com.example.crossFit.model.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,15 +22,19 @@ public class Client {
     private Integer subscriptionId;
     private String email;
     private BigDecimal balance;
+    @OneToMany(mappedBy = "clientId")
+    private List<Orders> orders;
 
 
-    public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId, String email, BigDecimal balance) {
+    public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId,
+                  List<Orders> orders, String email, BigDecimal balance) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
         this.subscriptionId = subscriptionId;
         this.email = email;
         this.balance = balance;
+        this.orders = orders;
     }
 
     public Client() {
@@ -91,4 +96,11 @@ public class Client {
         this.balance = balance;
     }
 
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Orders> orders) {
+        this.orders = orders;
+    }
 }
