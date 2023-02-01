@@ -35,9 +35,9 @@ public class ClientController {
     }
 
     @ApiOperation("Метод для получения клиента по его номеру телефона")
-    @GetMapping("/findByPhone/{phone}")
-    public Client findByNumberPhone(@PathVariable String phone) {
-        return clientService.findByPhoneNumber(phone);
+    @GetMapping("/findByPhone")
+    public Client findByNumberPhone(@RequestParam String phoneNumber) {
+        return clientService.findByPhoneNumber(phoneNumber);
     }
 
     @ApiOperation("Метод для добавления клиента")

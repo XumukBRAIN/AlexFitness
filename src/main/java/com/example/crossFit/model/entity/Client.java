@@ -1,5 +1,7 @@
 package com.example.crossFit.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -22,6 +24,7 @@ public class Client {
     private Integer subscriptionId;
     private String email;
     private BigDecimal balance;
+    @JsonIgnore
     @OneToMany(mappedBy = "clientId")
     private List<Orders> orders;
 
