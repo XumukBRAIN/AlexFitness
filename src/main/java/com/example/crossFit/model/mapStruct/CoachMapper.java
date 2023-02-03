@@ -14,6 +14,7 @@ public interface CoachMapper {
 
     @Mapping(target = "id", source = "coachId")
     @Mapping(target = "name", source = "coachName")
+    @Mapping(target = "password", source = "coachPassword")
     Coach toCoach(CoachDTO coachDTO);
 
 }

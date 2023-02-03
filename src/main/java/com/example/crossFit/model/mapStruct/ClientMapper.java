@@ -22,6 +22,7 @@ public interface ClientMapper {
     @Mapping(target = "coach", source = "clientCoach")
     @Mapping(target = "subscriptionId", source = "clientSubscriptionId")
     @Mapping(target = "email", source = "clientEmail")
+    @Mapping(target = "password", source = "clientPassword")
     Client toClient(ClientDTO clientDTO);
 
 }

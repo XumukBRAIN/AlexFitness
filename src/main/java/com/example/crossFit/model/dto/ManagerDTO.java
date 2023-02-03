@@ -4,10 +4,14 @@ public class ManagerDTO {
 
     private Integer managerId;
     private String managerName;
+    private String managerEmail;
+    private String managerPassword;
 
-    public ManagerDTO(Integer managerId, String managerName) {
+    public ManagerDTO(Integer managerId, String managerName, String managerEmail, String managerPassword) {
         this.managerId = managerId;
         this.managerName = managerName;
+        this.managerEmail = managerEmail;
+        this.managerPassword = managerPassword;
     }
 
     public Integer getManagerId() {
@@ -26,4 +30,19 @@ public class ManagerDTO {
         this.managerName = managerName;
     }
 
+    public String getManagerPassword() {
+        return managerPassword;
+    }
+
+    public void setManagerPassword(String managerPassword) {
+        this.managerPassword = managerPassword;
+    }
+
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    public void setManagerEmail(String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
 }

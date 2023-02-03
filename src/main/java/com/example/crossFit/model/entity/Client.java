@@ -23,6 +23,8 @@ public class Client {
     @JoinColumn(name = "subscription_id")
     private Integer subscriptionId;
     private String email;
+    @JsonIgnore
+    private String password;
     private BigDecimal balance;
     @JsonIgnore
     @OneToMany(mappedBy = "clientId")
@@ -30,7 +32,7 @@ public class Client {
 
 
     public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId,
-                  List<Orders> orders, String email, BigDecimal balance) {
+                  List<Orders> orders, String email, BigDecimal balance, String password) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
@@ -38,6 +40,7 @@ public class Client {
         this.email = email;
         this.balance = balance;
         this.orders = orders;
+        this.password = password;
     }
 
     public Client() {
@@ -105,5 +108,13 @@ public class Client {
 
     public void setOrders(List<Orders> orders) {
         this.orders = orders;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -1,10 +1,12 @@
 package com.example.crossFit.service;
 
+import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
 import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.repository.ManagerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 @Service
 public class ManagerService {
     private final ManagerRepo managerRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ManagerService(ManagerRepo managerRepo) {
+    public ManagerService(ManagerRepo managerRepo, PasswordEncoder passwordEncoder) {
         this.managerRepo = managerRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -26,7 +30,14 @@ public class ManagerService {
 
     @Transactional
     public void createManager(Manager manager) {
-        managerRepo.save(manager);
+        Manager manager1 = managerRepo.findByEmail(manager.getEmail());
+        if (manager1 != null) {
+            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
+                    "Администратор с такой почтой уже зарегистрирован");
+        } else {
+            passwordEncoder.encode(manager.getPassword());
+            managerRepo.save(manager);
+        }
     }
 
     @Transactional(readOnly = true)
