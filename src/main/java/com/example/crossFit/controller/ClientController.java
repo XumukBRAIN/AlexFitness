@@ -41,7 +41,7 @@ public class ClientController {
     }
 
     @ApiOperation("Метод для добавления клиента")
-    @PostMapping("/registerClient")
+    @PostMapping("/register")
     public void registerVisitor(@RequestBody ClientDTO clientDTO) {
         clientService.registerVisitor(clientMapper.toClient(clientDTO));
     }

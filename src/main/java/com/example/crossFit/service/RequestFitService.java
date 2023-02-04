@@ -1,6 +1,7 @@
 package com.example.crossFit.service;
 
 
+import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
 import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Accountant;
 import com.example.crossFit.model.entity.Client;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +49,18 @@ public class RequestFitService {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Transactional
     public void createRequest(RequestFit requestFit) {
+        RequestFit requestFit1 = requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber());
+        if (requestFit1 != null) {
+            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
+                    "Заявка с таким номером уже создана");
+        }
         requestFitRepo.save(requestFit);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public RequestFit findByPhoneNumber(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
@@ -61,6 +71,7 @@ public class RequestFitService {
         return requestFit;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public List<RequestFit> showAllRequestFitIsNotApprove() {
         List<RequestFit> requestFitsList = requestFitRepo.findAllByIsApprovedNull();
@@ -71,17 +82,20 @@ public class RequestFitService {
         return requestFitsList;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public List<RequestFit> findAllRequestFit() {
         return requestFitRepo.findAll();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void deleteRequestFit(String phoneNumber) {
         findByPhoneNumber(phoneNumber);
         requestFitRepo.deleteByPhoneNumber(phoneNumber);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
@@ -96,6 +110,7 @@ public class RequestFitService {
         sendMessage(requestFit.getEmail(), "Отказ", "К сожалению, Ваша заявка отклонена!");
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void approve(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
@@ -121,6 +136,7 @@ public class RequestFitService {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void subscriptionPayment(BigDecimal money, String email) {
         Client client = clientRepo.findByEmail(email);
@@ -136,6 +152,7 @@ public class RequestFitService {
         accountantService.save(accountant);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void sendMessage(String to, String subject, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

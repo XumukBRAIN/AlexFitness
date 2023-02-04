@@ -9,4 +9,6 @@ public interface ManagerRepo extends JpaRepository<Manager, Integer> {
 
     Manager findByName(String name);
 
+    Manager findByEmail(String email);
+
 }

@@ -5,6 +5,7 @@ import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.OrdersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class OrdersService {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public void deleteOrders(Integer id) {
         Optional<Orders> o = ordersRepo.findById(id);
@@ -31,6 +33,7 @@ public class OrdersService {
         ordersRepo.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public List<Orders> showMyOrders(String phoneNumber) {
         List<Orders> orders = ordersRepo.findByPhoneNumber(phoneNumber);

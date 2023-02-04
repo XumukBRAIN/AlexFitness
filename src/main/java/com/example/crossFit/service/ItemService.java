@@ -8,6 +8,7 @@ import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class ItemService {
         this.ordersRepo = ordersRepo;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional(readOnly = true)
     public List<Item> showMyItems(String phoneNumber) {
         List<Orders> orders = ordersRepo.findByPhoneNumber(phoneNumber);
@@ -45,6 +47,7 @@ public class ItemService {
         return items;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void createItem(Item item) {
         Optional<Item> i = itemRepo.findById(item.getId());
