@@ -41,7 +41,7 @@ public class ManagerController {
     }
 
     @ApiOperation("Метод для добавления менеджера в базу")
-    @PostMapping("/createManager")
+    @PostMapping("/register")
     public void createManager(@RequestBody ManagerDTO managerDTO) {
         Manager manager = managerMapper.toManager(managerDTO);
         managerService.createManager(manager);

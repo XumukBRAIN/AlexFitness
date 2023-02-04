@@ -3,9 +3,11 @@ package com.example.crossFit.security;
 import com.example.crossFit.model.entity.Coach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class CoachDetails implements UserDetails {
 
@@ -18,7 +20,7 @@ public class CoachDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(coach.getRole()));
     }
 
     @Override

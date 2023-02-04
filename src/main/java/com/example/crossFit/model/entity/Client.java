@@ -29,10 +29,12 @@ public class Client {
     @JsonIgnore
     @OneToMany(mappedBy = "clientId")
     private List<Orders> orders;
+    @JsonIgnore
+    private String role;
 
 
     public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId,
-                  List<Orders> orders, String email, BigDecimal balance, String password) {
+                  List<Orders> orders, String email, BigDecimal balance, String password, String role) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
@@ -41,6 +43,7 @@ public class Client {
         this.balance = balance;
         this.orders = orders;
         this.password = password;
+        this.role = role;
     }
 
     public Client() {
@@ -116,5 +119,13 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

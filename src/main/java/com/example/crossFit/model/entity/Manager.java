@@ -16,14 +16,17 @@ public class Manager {
     private String email;
     @JsonIgnore
     private String password;
+    @JsonIgnore
+    private String role;
 
     public Manager() {
     }
 
-    public Manager(String name, String password, String email) {
+    public Manager(String name, String password, String email, String role) {
         this.name = name;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -56,5 +59,13 @@ public class Manager {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -17,6 +17,8 @@ public class Coach {
     private String email;
     @JsonIgnore
     private String password;
+    @JsonIgnore
+    private String role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "coach")
@@ -30,12 +32,13 @@ public class Coach {
     }
 
     public Coach(String name, List<Client> clients, List<RequestFit> requestFits,
-                 String password, String email) {
+                 String password, String email, String role) {
         this.name = name;
         this.clients = clients;
         this.requestFits = requestFits;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -84,5 +87,13 @@ public class Coach {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -27,6 +27,12 @@ public class RequestFitController {
         this.requestFitMapper = requestFitMapper;
     }
 
+    @ApiOperation("Метод для поиска заявки по номеру телефона")
+    @PostMapping("/findByPhoneNumber")
+    public RequestFit findByPhoneNumber(@RequestParam String phoneNumber) {
+        return requestFitService.findByPhoneNumber(phoneNumber);
+    }
+
     @ApiOperation("Метод для создание заявки на абонемент и тренера")
     @PostMapping("/create")
     public void createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {

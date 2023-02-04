@@ -42,7 +42,7 @@ public class PeopleDetailsService implements UserDetailsService {
         Coach coach = coachRepo.findByEmail(username);
         if (coach != null) {
             return new CoachDetails(coach);
-        } else throw new UsernameNotFoundException("Совпадений не найдено!");
+        } else throw new UsernameNotFoundException("Неверный логин!");
 
     }
 }

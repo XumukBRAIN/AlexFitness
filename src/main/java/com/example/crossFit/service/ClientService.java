@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +62,7 @@ public class ClientService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     @Transactional(readOnly = true)
     public Client getVisitor(UUID id) {
         Client client = clientRepo.findById(id);
@@ -71,6 +73,7 @@ public class ClientService {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     @Transactional(readOnly = true)
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
@@ -81,6 +84,7 @@ public class ClientService {
         return client;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public void registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
@@ -92,10 +96,13 @@ public class ClientService {
                     "Клиент с такой электронной почтой уже зарегистрирован");
         }
         client.setBalance(BigDecimal.valueOf(0));
+        client.setRole("ROLE_USER");
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         clientRepo.save(client);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void deleteClient(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
@@ -106,6 +113,7 @@ public class ClientService {
         clientRepo.delete(client);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public void payClient(String phoneNumber, BigDecimal money) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
@@ -114,12 +122,12 @@ public class ClientService {
                     "Клиент с таким номером телефона не найден в базе");
         }
         client.setBalance(client.getBalance().add(money));
-        passwordEncoder.encode(client.getPassword());
 
         clientRepo.save(client);
 
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public void createMyOrders(String phoneNumber, Integer id, String title) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
