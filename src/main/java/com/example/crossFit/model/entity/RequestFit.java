@@ -1,5 +1,8 @@
 package com.example.crossFit.model.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -7,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "request_fit")
+@Getter
+@Setter
+@NoArgsConstructor
 public class RequestFit {
 
     @Id
@@ -47,8 +53,6 @@ public class RequestFit {
         return id;
     }
 
-    public RequestFit() {
-    }
 
     public RequestFit(String title, Integer subId, Integer coachId, LocalDateTime reqDate, String phoneNumber) {
         this.title = title;
@@ -58,48 +62,5 @@ public class RequestFit {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getSubId() {
-        return subId;
-    }
-
-    public void setSubId(Integer subId) {
-        this.subId = subId;
-    }
-
-    public Integer getCoachId() {
-        return coachId;
-    }
-
-    public void setCoachId(Integer coachId) {
-        this.coachId = coachId;
-    }
-
-    public LocalDateTime getReqDate() {
-        return reqDate;
-    }
-
-    public void setReqDate(LocalDateTime reqDate) {
-        this.reqDate = reqDate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
 }

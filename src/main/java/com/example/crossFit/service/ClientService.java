@@ -8,6 +8,7 @@ import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class ClientService {
 
@@ -77,6 +79,7 @@ public class ClientService {
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
+            log.info("Пользователь с таким телефоном не найден!");
             throw new ResourceNotFoundException("Клиент с телефоном: " + phoneNumber + " не найден в базе");
         }
         return client;
@@ -134,6 +137,7 @@ public class ClientService {
     public String createMyOrders(String phoneNumber, Integer id, String title) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
+            log.info("Клиент с таким номером телефона не найден", new ResourceNotFoundException());
             throw new ResourceNotFoundException("Клиент с таким номером телефона: " + phoneNumber +
                     " не зарегистрирован!");
         }
@@ -145,7 +149,7 @@ public class ClientService {
 
         Orders o = ordersRepo.findByClientId(client.getId());
         if (o != null) {
-            o.setItems(item.get());
+            o.addItem(item.get());
             o.setSum(o.getSum().add(item.get().getPrice()));
         } else {
 
@@ -173,7 +177,7 @@ public class ClientService {
             }
 
             orders.setSum(orders.getSum().add(item.get().getPrice()));
-            orders.setItems(item.get());
+            orders.addItem(item.get());
 
             ordersRepo.save(orders);
 
