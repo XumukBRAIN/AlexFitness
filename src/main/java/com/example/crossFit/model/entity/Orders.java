@@ -49,8 +49,26 @@ public class Orders {
         this.phoneNumber = phoneNumber;
     }
 
+
+    public LocalDateTime getReqDate() {
+        return reqDate;
+    }
+
+    public void setReqDate(LocalDateTime reqDate) {
+        this.reqDate = reqDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public void addItem(Item item) {
         this.items.add(item);
     }
+
 
 }

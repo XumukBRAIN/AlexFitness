@@ -10,6 +10,7 @@ import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,9 +28,9 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class ClientService {
+    private static Logger log;
 
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
