@@ -8,6 +8,7 @@ import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
-
 
 @Service
 public class ClientService {

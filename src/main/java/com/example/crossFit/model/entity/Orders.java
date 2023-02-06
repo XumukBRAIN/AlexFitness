@@ -1,5 +1,8 @@
 package com.example.crossFit.model.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.util.UUID;
 
 @Entity
 @Table
+@Getter
+@Setter
+@NoArgsConstructor
 public class Orders {
 
     @Id
@@ -43,56 +49,6 @@ public class Orders {
         this.phoneNumber = phoneNumber;
     }
 
-    public Orders() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
-
-    public UUID getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Item item) {
-        this.items.add(item);
-    }
 
     public LocalDateTime getReqDate() {
         return reqDate;
@@ -113,5 +69,6 @@ public class Orders {
     public void addItem(Item item) {
         this.items.add(item);
     }
+
 
 }
