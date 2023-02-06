@@ -24,6 +24,11 @@ public class UtilController {
         this.utilService = utilService;
     }
 
+    /**
+     * Автономный метод массовой рассылки
+     *
+     * @param messageDTO
+     */
     @ApiOperation("Метод единовременной массовой рассылки")
     @PostMapping("/sendToAll")
     public void sendToAll(@RequestBody MessageDTO messageDTO) {

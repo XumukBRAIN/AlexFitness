@@ -1,8 +1,12 @@
 package com.example.crossFit.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.UUID;
 
-
+@Getter
+@Setter
 public class ClientDTO {
 
     private UUID clientId;
@@ -24,59 +28,5 @@ public class ClientDTO {
         this.clientPassword = clientPassword;
     }
 
-    public UUID getClientId() {
-        return clientId;
-    }
 
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getClientName() {
-        return clientName;
-    }
-
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
-    public String getClientPhoneNumber() {
-        return clientPhoneNumber;
-    }
-
-    public void setClientPhoneNumber(String clientPhoneNumber) {
-        this.clientPhoneNumber = clientPhoneNumber;
-    }
-
-    public Integer getClientCoach() {
-        return clientCoach;
-    }
-
-    public void setClientCoach(Integer clientCoach) {
-        this.clientCoach = clientCoach;
-    }
-
-    public Integer getClientSubscriptionId() {
-        return clientSubscriptionId;
-    }
-
-    public void setClientSubscriptionId(Integer clientSubscriptionId) {
-        this.clientSubscriptionId = clientSubscriptionId;
-    }
-
-    public String getClientEmail() {
-        return clientEmail;
-    }
-
-    public void setClientEmail(String clientEmail) {
-        this.clientEmail = clientEmail;
-    }
-
-    public String getClientPassword() {
-        return clientPassword;
-    }
-
-    public void setClientPassword(String clientPassword) {
-        this.clientPassword = clientPassword;
-    }
 }

@@ -1,12 +1,18 @@
 package com.example.crossFit.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "coach")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,8 +34,6 @@ public class Coach {
     @OneToMany(mappedBy = "coachId")
     private List<RequestFit> requestFits;
 
-    public Coach() {
-    }
 
     public Coach(String name, List<Client> clients, List<RequestFit> requestFits,
                  String password, String email, String role) {
@@ -41,59 +45,5 @@ public class Coach {
         this.role = role;
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
-
-    public List<RequestFit> getRequestFits() {
-        return requestFits;
-    }
-
-    public void setRequestFits(List<RequestFit> requestFits) {
-        this.requestFits = requestFits;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

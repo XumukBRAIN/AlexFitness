@@ -1,7 +1,12 @@
 package com.example.crossFit.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 public class SubscriptionDTO {
 
     private Integer subId;
@@ -13,38 +18,6 @@ public class SubscriptionDTO {
         this.subId = subId;
         this.subTitle = subTitle;
         this.subPrice = subPrice;
-        this.subDescription = subDescription;
-    }
-
-    public Integer getSubId() {
-        return subId;
-    }
-
-    public void setSubId(Integer subId) {
-        this.subId = subId;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public BigDecimal getSubPrice() {
-        return subPrice;
-    }
-
-    public void setSubPrice(BigDecimal subPrice) {
-        this.subPrice = subPrice;
-    }
-
-    public String getSubDescription() {
-        return subDescription;
-    }
-
-    public void setSubDescription(String subDescription) {
         this.subDescription = subDescription;
     }
 

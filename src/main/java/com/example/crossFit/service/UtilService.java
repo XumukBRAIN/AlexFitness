@@ -1,10 +1,12 @@
 package com.example.crossFit.service;
 
 import com.example.crossFit.repository.ClientRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class UtilService {
 
@@ -41,6 +43,7 @@ public class UtilService {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), title, text)
         );
+        log.info("Массовая рассылка выполнена!");
     }
 
 }

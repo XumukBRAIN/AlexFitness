@@ -1,17 +1,17 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
-import com.example.crossFit.exceptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.ResourceAlreadyIsRegistered;
+import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.Item;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class ClientService {
 
@@ -67,7 +68,7 @@ public class ClientService {
     public Client getVisitor(UUID id) {
         Client client = clientRepo.findById(id);
         if (client == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "Клиент с таким ID не найден");
+            throw new ResourceNotFoundException("Клиент с id " + id + " не найден в базе");
         }
         return client;
     }
@@ -78,73 +79,77 @@ public class ClientService {
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Клиент с таким номером телефона не найден");
+            log.info("Пользователь с таким телефоном не найден!");
+            throw new ResourceNotFoundException("Клиент с телефоном: " + phoneNumber + " не найден в базе");
         }
         return client;
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public void registerVisitor(Client client) {
+    public String registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
-            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
-                    "Клиент с таким номером телефона уже зарегистрирован");
+            throw new ResourceAlreadyIsRegistered("Клиент с таким номером телефона: " + client.getPhoneNumber() +
+                    " уже зарегистрирован!");
         }
         if (clientRepo.findByEmail(client.getEmail()) != null) {
-            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
-                    "Клиент с такой электронной почтой уже зарегистрирован");
+            throw new ResourceAlreadyIsRegistered("Клиент с такой электронной почтой: " + client.getEmail() +
+                    " уже зарегистрирован!");
         }
         client.setBalance(BigDecimal.valueOf(0));
         client.setRole("ROLE_USER");
         client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         clientRepo.save(client);
+        return "Регистрация прошла успешно";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public void deleteClient(String phoneNumber) {
+    public String deleteClient(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Клиент с таким номером телефона не зарегистрирован в базе");
+            throw new ResourceNotFoundException("Пользователь с номером телефона: " + phoneNumber +
+                    " не найден!");
         }
         clientRepo.delete(client);
+
+        return "Пользователь удален";
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public void payClient(String phoneNumber, BigDecimal money) {
+    public String payClient(String phoneNumber, BigDecimal money) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Клиент с таким номером телефона не найден в базе");
+            throw new ResourceNotFoundException("Клиент с таким номером телефона: " + phoneNumber +
+                    " не зарегистрирован в базе!");
         }
         client.setBalance(client.getBalance().add(money));
 
         clientRepo.save(client);
 
+        return "Платеж прошел успешно";
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public void createMyOrders(String phoneNumber, Integer id, String title) {
+    public String createMyOrders(String phoneNumber, Integer id, String title) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Клиент с таким номером телефона не найден");
+            log.info("Клиент с таким номером телефона не найден", new ResourceNotFoundException());
+            throw new ResourceNotFoundException("Клиент с таким номером телефона: " + phoneNumber +
+                    " не зарегистрирован!");
         }
 
         Optional<Item> item = itemRepo.findById(id);
         if (!item.isPresent()) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Товар не найден");
+            throw new ResourceNotFoundException("Товар с таким id: " + id + " не найден в базе!");
         }
 
         Orders o = ordersRepo.findByClientId(client.getId());
         if (o != null) {
-            o.setItems(item.get());
+            o.addItem(item.get());
             o.setSum(o.getSum().add(item.get().getPrice()));
         } else {
 
@@ -172,7 +177,7 @@ public class ClientService {
             }
 
             orders.setSum(orders.getSum().add(item.get().getPrice()));
-            orders.setItems(item.get());
+            orders.addItem(item.get());
 
             ordersRepo.save(orders);
 
@@ -185,6 +190,8 @@ public class ClientService {
             mailSender.send(mailMessage);
 
         }
+
+        return "Заказ создан!";
 
     }
 }
