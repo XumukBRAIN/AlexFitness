@@ -8,6 +8,7 @@ import com.example.crossFit.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,15 +28,15 @@ public class ItemController {
 
     @ApiOperation("Метод для добавления товара на витрину интернет-магазина")
     @PostMapping("/createItem")
-    public void createItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<String> createItem(@RequestBody ItemDTO itemDTO) {
         Item item = itemMapper.toItem(itemDTO);
-        itemService.createItem(item);
+        return ResponseEntity.ok(itemService.createItem(item));
     }
 
     @ApiOperation("Метод для просмотра всех заказов клиента по номеру телефона")
     @GetMapping("/showMyItems")
-    public List<ItemDTO> showMyItems(@RequestParam String phoneNumber) {
+    public ResponseEntity<List<ItemDTO>> showMyItems(@RequestParam String phoneNumber) {
         List<Item> items = itemService.showMyItems(phoneNumber);
-        return itemMapper.toItemListDTO(items);
+        return ResponseEntity.ok(itemMapper.toItemListDTO(items));
     }
 }

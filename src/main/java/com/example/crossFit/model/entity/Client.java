@@ -27,7 +27,7 @@ public class Client {
     private String password;
     private BigDecimal balance;
     @JsonIgnore
-    @OneToMany(mappedBy = "clientId")
+    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
     private List<Orders> orders;
     @JsonIgnore
     private String role;

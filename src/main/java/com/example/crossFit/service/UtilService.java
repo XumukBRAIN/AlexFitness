@@ -37,10 +37,11 @@ public class UtilService {
      * @param text  текст из json
      */
     @Transactional
-    public void sendToAll(String title, String text) {
+    public String sendToAll(String title, String text) {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), title, text)
         );
+        return "Рассылка выполнена!";
     }
 
 }
