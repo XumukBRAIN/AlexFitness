@@ -9,6 +9,7 @@ import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,8 +27,10 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class ClientService {
+    private static Logger log;
 
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
@@ -77,6 +80,7 @@ public class ClientService {
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
+            log.info("Пользователь с таким телефоном не найден!");
             throw new ResourceNotFoundException("Клиент с телефоном: " + phoneNumber + " не найден в базе");
         }
         return client;
@@ -134,6 +138,7 @@ public class ClientService {
     public String createMyOrders(String phoneNumber, Integer id, String title) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
+            log.info("Клиент с таким номером телефона не найден", new ResourceNotFoundException());
             throw new ResourceNotFoundException("Клиент с таким номером телефона: " + phoneNumber +
                     " не зарегистрирован!");
         }
@@ -145,7 +150,7 @@ public class ClientService {
 
         Orders o = ordersRepo.findByClientId(client.getId());
         if (o != null) {
-            o.setItems(item.get());
+            o.addItem(item.get());
             o.setSum(o.getSum().add(item.get().getPrice()));
         } else {
 
@@ -173,7 +178,7 @@ public class ClientService {
             }
 
             orders.setSum(orders.getSum().add(item.get().getPrice()));
-            orders.setItems(item.get());
+            orders.addItem(item.get());
 
             ordersRepo.save(orders);
 

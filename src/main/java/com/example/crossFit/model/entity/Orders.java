@@ -110,4 +110,8 @@ public class Orders {
         this.phoneNumber = phoneNumber;
     }
 
+    public void addItem(Item item) {
+        this.items.add(item);
+    }
+
 }

@@ -153,6 +153,9 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void sendMessage(String to, String subject, String text) {
+        if (mailSender == null) {
+            return;
+        }
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(mail);
         mailMessage.setTo(to);

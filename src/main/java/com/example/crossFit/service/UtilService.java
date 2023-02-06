@@ -1,12 +1,14 @@
 package com.example.crossFit.service;
 
 import com.example.crossFit.repository.ClientRepo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UtilService {
+    private static Logger log;
 
     private final RequestFitService requestFitService;
     private final ClientRepo clientRepo;
@@ -37,11 +39,11 @@ public class UtilService {
      * @param text  текст из json
      */
     @Transactional
-    public String sendToAll(String title, String text) {
+    public void sendToAll(String title, String text) {
         clientRepo.findAll().stream().filter(client -> client.getEmail() != null).forEach(client ->
                 requestFitService.sendMessage(client.getEmail(), title, text)
         );
-        return "Рассылка выполнена!";
+        log.info("Массовая рассылка выполнена!");
     }
 
 }
