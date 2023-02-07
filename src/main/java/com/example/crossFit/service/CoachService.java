@@ -1,11 +1,10 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
-import com.example.crossFit.exceptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.ResourceAlreadyIsRegisteredException;
+import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.repository.CoachRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,45 +25,42 @@ public class CoachService {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     @Transactional(readOnly = true)
-    public Optional<Coach> getCoach(Integer id) {
-        return coachRepo.findById(id);
+    public Coach getCoach(Integer id) {
+        Optional<Coach> coach = coachRepo.findById(id);
+        if (!coach.isPresent()) {
+            throw new ResourceNotFoundException("Тренер с таким id: " + id + " не зарегистрирован!");
+        }
+        return coach.get();
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
-    @Transactional(readOnly = true)
-    public Coach findByName(String name) {
-        Coach coach = coachRepo.findByName(name);
-        if (coach == null) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Тренер с таким именем не найден в базе");
-        }
-        return coach;
-    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public void createCoach(Coach coach) {
+    public String createCoach(Coach coach) {
         Coach coach1 = coachRepo.findByEmail(coach.getEmail());
         if (coach1 != null) {
-            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
-                    "Тренер с такой электронной почтой уже зарегистрирован");
+            throw new ResourceAlreadyIsRegisteredException("Тренер с такой электронной почтой: "
+                    + coach.getEmail() + " уже зарегистрирован!");
         } else {
             coach.setPassword(passwordEncoder.encode(coach.getPassword()));
             coach.setRole("ROLE_COACH");
             coachRepo.save(coach);
         }
 
+        return "Тренер успешно зарегистрирован!";
+
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public void deleteCoach(Integer id) {
+    public String deleteCoach(Integer id) {
         Optional<Coach> coach = coachRepo.findById(id);
         if (!coach.isPresent()) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Тренер с таким ID не найден в базе");
+            throw new ResourceNotFoundException("Тренер с таким id: " + id + " не зарегистрирован!");
         }
         coachRepo.deleteById(id);
+
+        return "Тренер успешно удален!";
     }
 
 }

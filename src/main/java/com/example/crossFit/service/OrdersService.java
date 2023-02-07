@@ -1,10 +1,9 @@
 package com.example.crossFit.service;
 
-import com.example.crossFit.exceptions.EntityNotFoundException;
+import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.OrdersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +23,14 @@ public class OrdersService {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public void deleteOrders(Integer id) {
+    public String deleteOrders(Integer id) {
         Optional<Orders> o = ordersRepo.findById(id);
         if (!o.isPresent()) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "Заказ не найден");
+            throw new ResourceNotFoundException("Заказа с таким id: " + id + " не найдено!");
         }
         ordersRepo.deleteById(id);
+
+        return "Заказ успешно удален!";
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -38,8 +38,8 @@ public class OrdersService {
     public List<Orders> showMyOrders(String phoneNumber) {
         List<Orders> orders = ordersRepo.findByPhoneNumber(phoneNumber);
         if (orders.isEmpty()) {
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
-                    "По данному телефону не найдено ни одного заказа");
+            throw new ResourceNotFoundException("По данному номеру телефона: "
+                    + phoneNumber + " не найдено ни одного заказ!");
         }
         return orders;
     }

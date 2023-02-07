@@ -8,6 +8,7 @@ import com.example.crossFit.service.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,39 +30,39 @@ public class ClientController {
 
     @ApiOperation("Метод для получения клиента по его айди")
     @GetMapping("/getOne")
-    public ClientDTO getClient(@RequestParam UUID id) {
+    public ResponseEntity<ClientDTO> getClient(@RequestParam UUID id) {
         Client client = clientService.getVisitor(id);
-        return clientMapper.toClientDTO(client);
+        return ResponseEntity.ok(clientMapper.toClientDTO(client));
     }
 
     @ApiOperation("Метод для получения клиента по его номеру телефона")
     @GetMapping("/findByPhone")
-    public Client findByNumberPhone(@RequestParam String phoneNumber) {
-        return clientService.findByPhoneNumber(phoneNumber);
+    public ResponseEntity<Client> findByNumberPhone(@RequestParam String phoneNumber) {
+        return ResponseEntity.ok(clientService.findByPhoneNumber(phoneNumber));
     }
 
     @ApiOperation("Метод для добавления клиента")
     @PostMapping("/register")
-    public void registerVisitor(@RequestBody ClientDTO clientDTO) {
-        clientService.registerVisitor(clientMapper.toClient(clientDTO));
+    public ResponseEntity<String> registerVisitor(@RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.ok(clientService.registerVisitor(clientMapper.toClient(clientDTO)));
     }
 
     @ApiOperation("Метод для удаления клиента из базы данных")
     @DeleteMapping("/deleteClient")
-    public void deleteClient(@RequestParam String phoneNumber) {
-        clientService.deleteClient(phoneNumber);
+    public ResponseEntity<String> deleteClient(@RequestParam String phoneNumber) {
+        return ResponseEntity.ok(clientService.deleteClient(phoneNumber));
     }
 
     @ApiOperation("Метод для пополнения личного кабинета клиента")
     @PatchMapping("/pay")
-    public void payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
-        clientService.payClient(phoneNumber, money);
+    public ResponseEntity<String> payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
+        return ResponseEntity.ok(clientService.payClient(phoneNumber, money));
     }
 
     @PostMapping("/orders/create")
-    public void createOrder(@RequestParam String phoneNumber,
-                            @RequestParam Integer id, @RequestParam String title) {
-        clientService.createMyOrders(phoneNumber, id, title);
+    public ResponseEntity<String> createOrder(@RequestParam String phoneNumber,
+                                              @RequestParam Integer id, @RequestParam String title) {
+        return ResponseEntity.ok(clientService.createMyOrders(phoneNumber, id, title));
     }
 
 }

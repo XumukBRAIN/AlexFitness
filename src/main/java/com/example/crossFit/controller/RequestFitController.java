@@ -8,6 +8,7 @@ import com.example.crossFit.service.RequestFitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,53 +30,54 @@ public class RequestFitController {
 
     @ApiOperation("Метод для поиска заявки по номеру телефона")
     @PostMapping("/findByPhoneNumber")
-    public RequestFit findByPhoneNumber(@RequestParam String phoneNumber) {
-        return requestFitService.findByPhoneNumber(phoneNumber);
+    public ResponseEntity<RequestFitDTO> findByPhoneNumber(@RequestParam String phoneNumber) {
+        RequestFit requestFit = requestFitService.findByPhoneNumber(phoneNumber);
+        return ResponseEntity.ok(requestFitMapper.toRequestFitDto(requestFit));
     }
 
     @ApiOperation("Метод для создание заявки на абонемент и тренера")
     @PostMapping("/create")
-    public void createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {
+    public ResponseEntity<String> createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {
         RequestFit requestFit = requestFitMapper.toRequestFit(requestFitDTO);
-        requestFitService.createRequest(requestFit);
+        return ResponseEntity.ok(requestFitService.createRequest(requestFit));
     }
 
     @ApiOperation("Метод для удаления заявки на абонемент по номеру телефона клиента")
     @DeleteMapping("/deleteRequestFit")
-    public void deleteRequestFit(@RequestParam String phoneNumber) {
-        requestFitService.deleteRequestFit(phoneNumber);
+    public ResponseEntity<String> deleteRequestFit(@RequestParam String phoneNumber) {
+        return ResponseEntity.ok(requestFitService.deleteRequestFit(phoneNumber));
     }
 
     @ApiOperation("Метод для поиска всех неподтвержденных заявок ")
     @GetMapping("/notApproved")
-    public List<RequestFitDTO> findNotApprovedRequests() {
+    public ResponseEntity<List<RequestFitDTO>> findNotApprovedRequests() {
         List<RequestFit> listRequestFit = requestFitService.showAllRequestFitIsNotApprove();
-        return requestFitMapper.toRequestFitListDTO(listRequestFit);
+        return ResponseEntity.ok(requestFitMapper.toRequestFitListDTO(listRequestFit));
     }
 
     @ApiOperation("Метод для поиска всех заявок на абонемент и тренера")
     @GetMapping("/showRequestFit")
-    public List<RequestFitDTO> showAllRequestFit() {
+    public ResponseEntity<List<RequestFitDTO>> showAllRequestFit() {
         List<RequestFit> listRequestFit = requestFitService.findAllRequestFit();
-        return requestFitMapper.toRequestFitListDTO(listRequestFit);
+        return ResponseEntity.ok(requestFitMapper.toRequestFitListDTO(listRequestFit));
     }
 
     @ApiOperation("Метод для отклонения заявки на абонемент")
     @PatchMapping("/rejectRequestFit")
-    public void rejectRequestFit(@RequestParam String phoneNumber) {
-        requestFitService.rejectRequestFit(phoneNumber);
+    public ResponseEntity<String> rejectRequestFit(@RequestParam String phoneNumber) {
+        return ResponseEntity.ok(requestFitService.rejectRequestFit(phoneNumber));
     }
 
     @ApiOperation("Метод для одобрения заявки на абонемент")
     @PatchMapping("/approveRequestFit")
-    public void approveRequestFit(@RequestParam String phoneNumber) {
-        requestFitService.approve(phoneNumber);
+    public ResponseEntity<String> approveRequestFit(@RequestParam String phoneNumber) {
+        return ResponseEntity.ok(requestFitService.approve(phoneNumber));
     }
 
     @ApiOperation("Метод для оплаты абонемента")
     @PatchMapping("/paySub")
-    public void subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
-        requestFitService.subscriptionPayment(money, email);
+    public ResponseEntity<String> subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
+        return ResponseEntity.ok(requestFitService.subscriptionPayment(money, email));
     }
 
 }
