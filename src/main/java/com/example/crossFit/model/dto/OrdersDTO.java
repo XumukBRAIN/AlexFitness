@@ -1,12 +1,7 @@
 package com.example.crossFit.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 public class OrdersDTO {
     private Integer ordersId;
     private String ordersNumber;
@@ -20,4 +15,35 @@ public class OrdersDTO {
         this.ordersSum = ordersSum;
     }
 
+    public Integer getOrdersId() {
+        return ordersId;
+    }
+
+    public void setOrdersId(Integer ordersId) {
+        this.ordersId = ordersId;
+    }
+
+    public String getOrdersNumber() {
+        return ordersNumber;
+    }
+
+    public void setOrdersNumber(String ordersNumber) {
+        this.ordersNumber = ordersNumber;
+    }
+
+    public String getOrdersTitle() {
+        return ordersTitle;
+    }
+
+    public void setOrdersTitle(String ordersTitle) {
+        this.ordersTitle = ordersTitle;
+    }
+
+    public BigDecimal getOrdersSum() {
+        return ordersSum;
+    }
+
+    public void setOrdersSum(BigDecimal ordersSum) {
+        this.ordersSum = ordersSum;
+    }
 }

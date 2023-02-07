@@ -1,9 +1,6 @@
 package com.example.crossFit.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,9 +12,6 @@ import java.util.List;
 
 @Entity
 @Table
-@Getter
-@Setter
-@NoArgsConstructor
 public class Subscription {
 
     @Id
@@ -36,6 +30,8 @@ public class Subscription {
     @OneToMany(mappedBy = "subId")
     private List<RequestFit> requestFits;
 
+    public Subscription() {
+    }
 
     public Subscription(Integer id, String title, BigDecimal price, String description, List<Client> clients, List<RequestFit> requestFits) {
         this.id = id;
@@ -46,5 +42,51 @@ public class Subscription {
         this.requestFits = requestFits;
     }
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public List<RequestFit> getRequestFits() {
+        return requestFits;
+    }
+
+    public void setRequestFits(List<RequestFit> requestFits) {
+        this.requestFits = requestFits;
+    }
 }

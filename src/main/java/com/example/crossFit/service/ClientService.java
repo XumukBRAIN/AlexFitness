@@ -144,7 +144,7 @@ public class ClientService {
 
         Orders o = ordersRepo.findByClientId(client.getId());
         if (o != null) {
-            o.setItems(item.get());
+            o.addItem(item.get());
             o.setSum(o.getSum().add(item.get().getPrice()));
         } else {
 
@@ -172,7 +172,7 @@ public class ClientService {
             }
 
             orders.setSum(orders.getSum().add(item.get().getPrice()));
-            orders.setItems(item.get());
+            orders.addItem(item.get());
 
             ordersRepo.save(orders);
 

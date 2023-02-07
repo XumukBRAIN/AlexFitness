@@ -1,10 +1,5 @@
 package com.example.crossFit.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class CoachDTO {
 
     private Integer coachId;
@@ -19,4 +14,35 @@ public class CoachDTO {
         this.coachEmail = coachEmail;
     }
 
+    public Integer getCoachId() {
+        return coachId;
+    }
+
+    public void setCoachId(Integer coachId) {
+        this.coachId = coachId;
+    }
+
+    public String getCoachName() {
+        return coachName;
+    }
+
+    public void setCoachName(String coachName) {
+        this.coachName = coachName;
+    }
+
+    public String getCoachPassword() {
+        return coachPassword;
+    }
+
+    public void setCoachPassword(String coachPassword) {
+        this.coachPassword = coachPassword;
+    }
+
+    public String getCoachEmail() {
+        return coachEmail;
+    }
+
+    public void setCoachEmail(String coachEmail) {
+        this.coachEmail = coachEmail;
+    }
 }

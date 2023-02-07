@@ -1,10 +1,5 @@
 package com.example.crossFit.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class MessageDTO {
 
     private String title;
@@ -15,5 +10,19 @@ public class MessageDTO {
         this.text = text;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

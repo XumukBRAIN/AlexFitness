@@ -1,8 +1,5 @@
 package com.example.crossFit.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,9 +11,6 @@ import java.util.UUID;
 
 @Entity
 @Table
-@Getter
-@Setter
-@NoArgsConstructor
 public class Orders {
 
     @Id
@@ -36,6 +30,9 @@ public class Orders {
             joinColumns = @JoinColumn(name = "orders_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items = new ArrayList<>();
+
+    public Orders() {
+    }
 
     public Orders(Integer id, String number, String title, BigDecimal sum, UUID clientId,
                   List<Item> items, LocalDateTime reqDate, String phoneNumber) {
@@ -70,5 +67,51 @@ public class Orders {
         this.items.add(item);
     }
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public BigDecimal getSum() {
+        return sum;
+    }
+
+    public void setSum(BigDecimal sum) {
+        this.sum = sum;
+    }
+
+    public UUID getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(UUID clientId) {
+        this.clientId = clientId;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 }
