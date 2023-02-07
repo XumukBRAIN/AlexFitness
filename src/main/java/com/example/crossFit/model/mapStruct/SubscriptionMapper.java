@@ -5,6 +5,8 @@ import com.example.crossFit.model.entity.Subscription;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface SubscriptionMapper {
 
@@ -14,10 +16,14 @@ public interface SubscriptionMapper {
     @Mapping(target = "subDescription", source = "description")
     SubscriptionDTO toSubscriptionDTO(Subscription subscription);
 
+    List<SubscriptionDTO> toListSubscriptionDTO(List<Subscription> list);
+
     @Mapping(target = "id", source = "subId")
     @Mapping(target = "title", source = "subTitle")
     @Mapping(target = "price", source = "subPrice")
     @Mapping(target = "description", source = "subDescription")
     Subscription toSubscription(SubscriptionDTO subscriptionDTO);
+
+    List<Subscription> toListSubscription(List<SubscriptionDTO> list);
 
 }

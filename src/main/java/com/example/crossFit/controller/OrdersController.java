@@ -8,6 +8,7 @@ import com.example.crossFit.service.OrdersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,24 +26,18 @@ public class OrdersController {
         this.ordersMapper = ordersMapper;
     }
 
-   /* @ApiOperation("Метод для создания интернет-заказа")
-    @PostMapping("/createOrders")
-    public void createOrders(@RequestBody OrdersDTO ordersDTO) {
-        Orders orders = ordersMapper.toOrders(ordersDTO);
-        ordersService.createOrders(orders);
-    }*/
 
     @ApiOperation("Метод для удаления заказа по ID заказа")
     @DeleteMapping("/deleteOrder")
-    public void deleteOrders(@RequestParam Integer id) {
-        ordersService.deleteOrders(id);
+    public ResponseEntity<String> deleteOrders(@RequestParam Integer id) {
+        return ResponseEntity.ok(ordersService.deleteOrders(id));
     }
 
     @ApiOperation("Метод для поиска всех заказов по ID клиента")
     @GetMapping("/myOrders")
-    public List<OrdersDTO> showMyOrders(@RequestParam String phoneNumber) {
+    public ResponseEntity<List<OrdersDTO>> showMyOrders(@RequestParam String phoneNumber) {
         List<Orders> orders = ordersService.showMyOrders(phoneNumber);
-        return ordersMapper.toOrdersListDTO(orders);
+        return ResponseEntity.ok(ordersMapper.toOrdersListDTO(orders));
 
     }
 }

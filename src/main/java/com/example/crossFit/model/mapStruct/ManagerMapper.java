@@ -5,6 +5,8 @@ import com.example.crossFit.model.entity.Manager;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ManagerMapper {
 
@@ -13,10 +15,14 @@ public interface ManagerMapper {
     @Mapping(target = "managerEmail", source = "email")
     ManagerDTO toManagerDTO(Manager manager);
 
+    List<ManagerDTO> toListManagerDTO(List<Manager> list);
+
     @Mapping(target = "id", source = "managerId")
     @Mapping(target = "name", source = "managerName")
     @Mapping(target = "password", source = "managerPassword")
     @Mapping(target = "email", source = "managerEmail")
     Manager toManager(ManagerDTO managerDTO);
+
+    List<Manager> toListManager(List<ManagerDTO> list);
 
 }
