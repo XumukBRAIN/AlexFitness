@@ -33,7 +33,7 @@ public class Client {
     private String password;
     private BigDecimal balance;
     @JsonIgnore
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clientId")
     private List<Orders> orders;
     @JsonIgnore
     private String role;

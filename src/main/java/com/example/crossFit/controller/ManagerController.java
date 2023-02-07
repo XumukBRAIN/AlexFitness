@@ -8,8 +8,9 @@ import com.example.crossFit.service.ManagerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/manager")
@@ -28,29 +29,28 @@ public class ManagerController {
 
     @ApiOperation("Метод для поиска менеджера по ID")
     @GetMapping("/getOne")
-    public ResponseEntity<ManagerDTO> getManagerById(@RequestParam Integer id) {
-        Manager manager = managerService.getManager(id);
-        return ResponseEntity.ok(managerMapper.toManagerDTO(manager));
+    public Optional<Manager> getManagerById(@RequestParam Integer id) {
+        return managerService.getManager(id);
     }
 
     @ApiOperation("Метод для поиска менеджера по имени")
     @GetMapping("/getByName")
-    public ResponseEntity<ManagerDTO> getManagerByName(@RequestParam String name) {
+    public ManagerDTO getManagerByName(@RequestParam String name) {
         Manager manager = managerService.findByName(name);
-        return ResponseEntity.ok(managerMapper.toManagerDTO(manager));
+        return managerMapper.toManagerDTO(manager);
     }
 
     @ApiOperation("Метод для добавления менеджера в базу")
     @PostMapping("/register")
-    public ResponseEntity<String> createManager(@RequestBody ManagerDTO managerDTO) {
+    public void createManager(@RequestBody ManagerDTO managerDTO) {
         Manager manager = managerMapper.toManager(managerDTO);
-        return ResponseEntity.ok(managerService.createManager(manager));
+        managerService.createManager(manager);
     }
 
     @ApiOperation("Метод для удаления менеджера из базы")
     @DeleteMapping("/deleteManager")
-    public ResponseEntity<String> deleteManager(@RequestParam Integer id) {
-        return ResponseEntity.ok(managerService.deleteManager(id));
+    public void deleteManager(@RequestParam Integer id) {
+        managerService.deleteManager(id);
     }
 
 }

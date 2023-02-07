@@ -1,7 +1,8 @@
 package com.example.crossFit.service;
 
 
-import com.example.crossFit.exceptions.ResourceNotFoundException;
+import com.example.crossFit.exceptions.EntityAlreadyIsRegisteredException;
+import com.example.crossFit.exceptions.EntityNotFoundException;
 import com.example.crossFit.model.entity.Accountant;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.RequestFit;
@@ -9,6 +10,7 @@ import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.RequestFitRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,13 +51,13 @@ public class RequestFitService {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public String createRequestFit(RequestFit requestFit) {
-        if (requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber()) != null) {
-            throw new ResourceNotFoundException("Заявка по данному номеру телефона: " + requestFit.getPhoneNumber() +
-                    " уже была создана!");
+    public void createRequest(RequestFit requestFit) {
+        RequestFit requestFit1 = requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber());
+        if (requestFit1 != null) {
+            throw new EntityAlreadyIsRegisteredException(HttpStatus.BAD_REQUEST,
+                    "Заявка с таким номером уже создана");
         }
         requestFitRepo.save(requestFit);
-        return "Заявка создана!";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -63,7 +65,8 @@ public class RequestFitService {
     public RequestFit findByPhoneNumber(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка по данному номеру телефона: " + phoneNumber + " не найдена!");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
         }
         return requestFit;
     }
@@ -71,7 +74,12 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public List<RequestFit> showAllRequestFitIsNotApprove() {
-        return requestFitRepo.findAllByIsApprovedNull();
+        List<RequestFit> requestFitsList = requestFitRepo.findAllByIsApprovedNull();
+        if (requestFitsList.isEmpty()) {
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Новых заявок на абонемент не найдено");
+        }
+        return requestFitsList;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -82,41 +90,39 @@ public class RequestFitService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String deleteRequestFit(String phoneNumber) {
-        if (requestFitRepo.findByPhoneNumber(phoneNumber) == null) {
-            throw new ResourceNotFoundException("Заявка по данному номеру телефона: " + phoneNumber + " не найдена!");
-        }
-        return "Заявка удалена!";
+    public void deleteRequestFit(String phoneNumber) {
+        findByPhoneNumber(phoneNumber);
+        requestFitRepo.deleteByPhoneNumber(phoneNumber);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String rejectRequestFit(String phoneNumber) {
+    public void rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка с таким номером телефона: " + phoneNumber +
-                    " не найдена!");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
         }
         requestFit.setApproved(false);
+
         requestFitRepo.save(requestFit);
 
         sendMessage(requestFit.getEmail(), "Отказ", "К сожалению, Ваша заявка отклонена!");
-
-        return "Заявка отклонена!";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String approve(String phoneNumber) {
+    public void approve(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка с таким номером телефона: " + phoneNumber +
-                    " не найдена в базе!");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Заявка с указанным номером телефона не найдена");
         }
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
+
         if (client == null) {
-            throw new ResourceNotFoundException("Клиент с таким номером телефона: " + phoneNumber +
-                    " не зарегистрирован!");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Клиент с указанным номером телефона не найден в базе");
         }
 
         requestFit.setApproved(true);
@@ -128,17 +134,15 @@ public class RequestFitService {
 
         sendMessage(client.getEmail(), "Одобрено", "Одобрено! Ваша заявка ждет оплаты");
 
-        return "Заявка одобрена!";
-
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String subscriptionPayment(BigDecimal money, String email) {
+    public void subscriptionPayment(BigDecimal money, String email) {
         Client client = clientRepo.findByEmail(email);
         if (client == null) {
-            throw new ResourceNotFoundException("Клиент с указанной электронной почтой: " + email +
-                    " не зарегистрирован!");
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND,
+                    "Клиент с указанной электронной почтой не найден в базе");
         }
         client.setBalance(client.getBalance().subtract(money));
         clientRepo.save(client);
@@ -146,8 +150,6 @@ public class RequestFitService {
         Accountant accountant = accountantService.findByName(NAME);
         accountant.setBalance(accountant.getBalance().add(money));
         accountantService.save(accountant);
-
-        return "Оплата прошла успешно!";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

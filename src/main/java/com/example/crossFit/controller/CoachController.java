@@ -8,8 +8,9 @@ import com.example.crossFit.service.CoachService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/coach")
@@ -27,29 +28,28 @@ public class CoachController {
 
     @ApiOperation("Метод для поиска тренера по ID")
     @GetMapping("/getOne/{id}")
-    public ResponseEntity<CoachDTO> getCoach(@PathVariable Integer id) {
-        Coach coach = coachService.getCoach(id);
-        return ResponseEntity.ok(coachMapper.toCoachDTO(coach));
+    public Optional<Coach> getCoach(@PathVariable Integer id) {
+        return coachService.getCoach(id);
     }
 
     @ApiOperation("Метод для поиска тренера по имени")
     @GetMapping("/getCoach")
-    public ResponseEntity<CoachDTO> getCoachByName(@RequestParam String name) {
+    public CoachDTO getCoachByName(@RequestParam String name) {
         Coach coach = coachService.findByName(name);
-        return ResponseEntity.ok(coachMapper.toCoachDTO(coach));
+        return coachMapper.toCoachDTO(coach);
     }
 
     @ApiOperation("Метод для добавления тренера в базу")
     @PostMapping("/createCoach")
-    public ResponseEntity<String> createCoach(@RequestBody CoachDTO coachDTO) {
+    public void createCoach(@RequestBody CoachDTO coachDTO) {
         Coach coach = coachMapper.toCoach(coachDTO);
-        return ResponseEntity.ok(coachService.createCoach(coach));
+        coachService.createCoach(coach);
     }
 
     @ApiOperation("Метод для удаления тренера")
     @DeleteMapping("/deleteCoach")
-    public ResponseEntity<String> deleteCoach(@RequestParam Integer id) {
-        return ResponseEntity.ok(coachService.deleteCoach(id));
+    public void deleteCoach(@RequestParam Integer id) {
+        coachService.deleteCoach(id);
     }
 
 }
