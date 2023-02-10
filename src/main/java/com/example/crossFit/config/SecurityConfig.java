@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.authProvider = authProvider;
     }
 
-  /*@Override
+    @Override
    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().disable().authorizeHttpRequests()
+        http.csrf().disable(); /*.authorizeHttpRequests()
               .antMatchers("/auth/login", "/auth/login?error", "/manager/register").permitAll()
               .anyRequest().authenticated()
               .and()
@@ -36,9 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .and()
               .logout()
               .logoutUrl("/logout")
-              .logoutSuccessUrl("/auth/login");
+              .logoutSuccessUrl("/auth/login");*/
 
-  }*/
+    }
 
 
     @Override
