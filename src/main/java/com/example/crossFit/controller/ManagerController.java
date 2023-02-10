@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.ManagerDTO;
 import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.model.mapStruct.ManagerMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.ManagerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,13 +46,13 @@ public class ManagerController {
 
     @ApiOperation("Метод для добавления менеджера в базу")
     @PostMapping("/register")
-    public ResponseEntity<String> createManager(@RequestBody ManagerDTO managerDTO) {
+    public ResponseEntity<SuccessResponse> createManager(@RequestBody ManagerDTO managerDTO) {
         return ResponseEntity.ok(managerService.createManager(managerMapper.toManager(managerDTO)));
     }
 
     @ApiOperation("Метод для удаления менеджера из базы")
     @DeleteMapping("/deleteManager")
-    public ResponseEntity<String> deleteManager(@RequestParam Integer id) {
+    public ResponseEntity<SuccessResponse> deleteManager(@RequestParam Integer id) {
         return ResponseEntity.ok(managerService.deleteManager(id));
     }
 

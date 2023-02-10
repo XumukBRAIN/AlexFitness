@@ -6,7 +6,9 @@ import com.example.crossFit.model.entity.Item;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,11 +50,11 @@ public class ItemService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String createItem(Item item) {
+    public SuccessResponse createItem(Item item) {
         Optional<Item> i = itemRepo.findById(item.getId());
         if (!i.isPresent()) {
             itemRepo.save(item);
-            return "Товар успешно добавлен в магазин!";
+            return new SuccessResponse("Товар успешно добавлен в магазин!", HttpStatus.OK.value());
 
         } else
             throw new ResourceAlreadyIsRegisteredException("Товар с таким id: " + item.getId() + " уже присуствует в магазине!");

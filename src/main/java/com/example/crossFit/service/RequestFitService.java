@@ -8,8 +8,10 @@ import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.entity.RequestFit;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.RequestFitRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,7 +52,7 @@ public class RequestFitService {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public String createRequest(RequestFit requestFit) {
+    public SuccessResponse createRequest(RequestFit requestFit) {
         RequestFit requestFit1 = requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber());
         if (requestFit1 != null) {
             throw new ResourceAlreadyIsRegisteredException("Заявка с указанным номером телефона "
@@ -58,7 +60,7 @@ public class RequestFitService {
         }
         requestFitRepo.save(requestFit);
 
-        return "Заявка успешно зарегистрирована!";
+        return new SuccessResponse("Заявка успешно зарегистрирована!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -93,19 +95,19 @@ public class RequestFitService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String deleteRequestFit(String phoneNumber) {
+    public SuccessResponse deleteRequestFit(String phoneNumber) {
         if (requestFitRepo.findByPhoneNumber(phoneNumber) == null) {
             throw new ResourceNotFoundException("Заявка с указанным номером телефона: " + phoneNumber
                     + " не зарегистрирована!");
         }
         requestFitRepo.deleteByPhoneNumber(phoneNumber);
 
-        return "Заявка успешно удалена";
+        return new SuccessResponse("Заявка удалена!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String rejectRequestFit(String phoneNumber) {
+    public SuccessResponse rejectRequestFit(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
             throw new ResourceNotFoundException("Заявка с указанным номером телефона: "
@@ -117,12 +119,12 @@ public class RequestFitService {
 
         sendMessage(requestFit.getEmail(), "Отказ", "К сожалению, Ваша заявка отклонена!");
 
-        return "Заявка успешно обработана!";
+        return new SuccessResponse("Заявка обработана!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String approve(String phoneNumber) {
+    public SuccessResponse approve(String phoneNumber) {
         RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
         if (requestFit == null) {
             throw new ResourceNotFoundException("Заявка с указанным номером телефона: "
@@ -144,13 +146,13 @@ public class RequestFitService {
 
         sendMessage(client.getEmail(), "Одобрено", "Одобрено! Ваша заявка ждет оплаты");
 
-        return "Заявка успешно обработана!";
+        return new SuccessResponse("Заявка успешно обработана!", HttpStatus.OK.value());
 
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String subscriptionPayment(BigDecimal money, String email) {
+    public SuccessResponse subscriptionPayment(BigDecimal money, String email) {
         Client client = clientRepo.findByEmail(email);
         if (client == null) {
             throw new ResourceNotFoundException("Клиент с указанной электронной почтой: "
@@ -163,7 +165,7 @@ public class RequestFitService {
         accountant.setBalance(accountant.getBalance().add(money));
         accountantService.save(accountant);
 
-        return "Оплата прошла успешно!";
+        return new SuccessResponse("Оплата прошла успешно!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

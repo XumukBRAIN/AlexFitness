@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.OrdersDTO;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.model.mapStruct.OrdersMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.OrdersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ public class OrdersController {
 
     @ApiOperation("Метод для удаления заказа по ID заказа")
     @DeleteMapping("/deleteOrder")
-    public ResponseEntity<String> deleteOrders(@RequestParam Integer id) {
+    public ResponseEntity<SuccessResponse> deleteOrders(@RequestParam Integer id) {
         return ResponseEntity.ok(ordersService.deleteOrders(id));
     }
 

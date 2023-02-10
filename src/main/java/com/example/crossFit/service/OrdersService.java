@@ -3,7 +3,9 @@ package com.example.crossFit.service;
 import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.OrdersRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +25,14 @@ public class OrdersService {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public String deleteOrders(Integer id) {
+    public SuccessResponse deleteOrders(Integer id) {
         Optional<Orders> o = ordersRepo.findById(id);
         if (!o.isPresent()) {
             throw new ResourceNotFoundException("Заказа с таким id: " + id + " не найдено!");
         }
         ordersRepo.deleteById(id);
 
-        return "Заказ успешно удален!";
+        return new SuccessResponse("Заказ удален!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

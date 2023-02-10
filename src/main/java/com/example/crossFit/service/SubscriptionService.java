@@ -3,7 +3,9 @@ package com.example.crossFit.service;
 import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Subscription;
 import com.example.crossFit.repository.SubscriptionRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,19 +31,19 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public String createSub(Subscription subscription) {
+    public SuccessResponse createSub(Subscription subscription) {
         subscriptionRepo.save(subscription);
 
-        return "Абонемент успешно добавлен!";
+        return new SuccessResponse("Абонемент успешно добавлен!", HttpStatus.OK.value());
     }
 
     @Transactional
-    public String deleteSub(Integer id) {
+    public SuccessResponse deleteSub(Integer id) {
         Optional<Subscription> subscription = subscriptionRepo.findById(id);
         if (subscription.isPresent()) {
             subscriptionRepo.deleteById(id);
 
-            return "Абонемент успешно удален!";
+            return new SuccessResponse("Абонемент успешно удален!", HttpStatus.OK.value());
 
         } else throw new ResourceNotFoundException("Абонемента с таким id: " + id + " не найдено!");
     }
