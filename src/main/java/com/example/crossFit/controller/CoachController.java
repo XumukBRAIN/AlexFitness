@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/coach")
+@CrossOrigin
 @Api(tags = SwaggerConfig.COACH_TAG)
 public class CoachController {
 

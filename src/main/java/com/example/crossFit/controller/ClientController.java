@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/client")
+@CrossOrigin
 @Api(tags = SwaggerConfig.CLIENT_TAG)
 public class ClientController {
 

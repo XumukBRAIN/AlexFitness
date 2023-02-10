@@ -16,6 +16,7 @@ import java.util.List;
 @Api(SwaggerConfig.ORDERS_TAG)
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin
 public class OrdersController {
     private final OrdersService ordersService;
     private final OrdersMapper ordersMapper;

@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/requestFit")
+@CrossOrigin
 @Api(tags = SwaggerConfig.REQUEST_FIT_TAG)
 public class RequestFitController {
 
