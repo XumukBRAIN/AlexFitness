@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/subs")
+@CrossOrigin
 @Api(tags = SwaggerConfig.SUBSCRIPTION_TAG)
 public class SubscriptionController {
 

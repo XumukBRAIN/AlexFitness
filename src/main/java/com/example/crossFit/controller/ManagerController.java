@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/manager")
+@CrossOrigin
 @Api(tags = SwaggerConfig.MANAGER_TAG)
 public class ManagerController {
 
