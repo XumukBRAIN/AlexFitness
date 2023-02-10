@@ -8,9 +8,11 @@ import com.example.crossFit.model.entity.Orders;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,9 +85,9 @@ public class ClientService {
         return client;
     }
 
-   // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public String registerVisitor(Client client) {
+    public SuccessResponse registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
             throw new ResourceAlreadyIsRegisteredException("Клиент с таким номером телефона: "
                     + client.getPhoneNumber() + " уже зарегистрирован!");
@@ -100,12 +102,12 @@ public class ClientService {
 
         clientRepo.save(client);
 
-        return "Регистрация клиента прошла успешно!";
+        return new SuccessResponse("Регистрация прошла успешно!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String deleteClient(String phoneNumber) {
+    public SuccessResponse deleteClient(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
             throw new ResourceNotFoundException("Клиент с таким номером телефона: "
@@ -113,12 +115,12 @@ public class ClientService {
         }
         clientRepo.delete(client);
 
-        return "Клиент успешно удален!";
+        return new SuccessResponse("Клиент удален!", HttpStatus.OK.value());
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public String payClient(String phoneNumber, BigDecimal money) {
+    public SuccessResponse payClient(String phoneNumber, BigDecimal money) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
             throw new ResourceNotFoundException("Клиент с таким номером телефона: "
@@ -128,13 +130,13 @@ public class ClientService {
 
         clientRepo.save(client);
 
-        return "Оплата прошла успешно!";
+        return new SuccessResponse("Оплата прошла успешно!", HttpStatus.OK.value());
 
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public String createMyOrders(String phoneNumber, Integer id, String title) {
+    public SuccessResponse createMyOrders(String phoneNumber, Integer id, String title) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
             throw new ResourceNotFoundException("Клиент с указанным номером телефона: "
@@ -190,7 +192,7 @@ public class ClientService {
 
         }
 
-        return "Заказ создан!";
+        return new SuccessResponse("Заказ успешно создан!", HttpStatus.OK.value());
 
     }
 }

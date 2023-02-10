@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.ClientDTO;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.mapStruct.ClientMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,25 +45,25 @@ public class ClientController {
 
     @ApiOperation("Метод для добавления клиента")
     @PostMapping("/register")
-    public ResponseEntity<String> registerVisitor(@RequestBody ClientDTO clientDTO) {
+    public ResponseEntity<SuccessResponse> registerVisitor(@RequestBody ClientDTO clientDTO) {
         return ResponseEntity.ok(clientService.registerVisitor(clientMapper.toClient(clientDTO)));
     }
 
     @ApiOperation("Метод для удаления клиента из базы данных")
     @DeleteMapping("/deleteClient")
-    public ResponseEntity<String> deleteClient(@RequestParam String phoneNumber) {
+    public ResponseEntity<SuccessResponse> deleteClient(@RequestParam String phoneNumber) {
         return ResponseEntity.ok(clientService.deleteClient(phoneNumber));
     }
 
     @ApiOperation("Метод для пополнения личного кабинета клиента")
     @PatchMapping("/pay")
-    public ResponseEntity<String> payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
+    public ResponseEntity<SuccessResponse> payClient(@RequestParam String phoneNumber, @RequestParam BigDecimal money) {
         return ResponseEntity.ok(clientService.payClient(phoneNumber, money));
     }
 
     @PostMapping("/orders/create")
-    public ResponseEntity<String> createOrder(@RequestParam String phoneNumber,
-                                              @RequestParam Integer id, @RequestParam String title) {
+    public ResponseEntity<SuccessResponse> createOrder(@RequestParam String phoneNumber,
+                                                       @RequestParam Integer id, @RequestParam String title) {
         return ResponseEntity.ok(clientService.createMyOrders(phoneNumber, id, title));
     }
 

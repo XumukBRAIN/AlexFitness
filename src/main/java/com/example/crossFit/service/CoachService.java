@@ -4,7 +4,9 @@ import com.example.crossFit.exceptions.ResourceAlreadyIsRegisteredException;
 import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.repository.CoachRepo;
+import com.example.crossFit.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class CoachService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String createCoach(Coach coach) {
+    public SuccessResponse createCoach(Coach coach) {
         Coach coach1 = coachRepo.findByEmail(coach.getEmail());
         if (coach1 != null) {
             throw new ResourceAlreadyIsRegisteredException("Тренер с такой электронной почтой: "
@@ -47,20 +49,20 @@ public class CoachService {
             coachRepo.save(coach);
         }
 
-        return "Тренер успешно зарегистрирован!";
+        return new SuccessResponse("Тренер успешно зарегистрирован!", HttpStatus.OK.value());
 
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public String deleteCoach(Integer id) {
+    public SuccessResponse deleteCoach(Integer id) {
         Optional<Coach> coach = coachRepo.findById(id);
         if (!coach.isPresent()) {
             throw new ResourceNotFoundException("Тренер с таким id: " + id + " не зарегистрирован!");
         }
         coachRepo.deleteById(id);
 
-        return "Тренер успешно удален!";
+        return new SuccessResponse("Тренер успешно удален!", HttpStatus.OK.value());
     }
 
 }

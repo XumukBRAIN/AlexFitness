@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.SubscriptionDTO;
 import com.example.crossFit.model.entity.Subscription;
 import com.example.crossFit.model.mapStruct.SubscriptionMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.SubscriptionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,14 +38,14 @@ public class SubscriptionController {
 
     @ApiOperation("Метод для добавления нового вида абонемента")
     @PostMapping("/createSub")
-    public ResponseEntity<String> createSub(@RequestBody SubscriptionDTO subscriptionDTO) {
+    public ResponseEntity<SuccessResponse> createSub(@RequestBody SubscriptionDTO subscriptionDTO) {
         Subscription subscription = subscriptionMapper.toSubscription(subscriptionDTO);
         return ResponseEntity.ok(subscriptionService.createSub(subscription));
     }
 
     @ApiOperation("Метод для удаления абонемента по ID")
     @DeleteMapping("/deleteSub")
-    public ResponseEntity<String> deleteSub(@RequestParam Integer id) {
+    public ResponseEntity<SuccessResponse> deleteSub(@RequestParam Integer id) {
         return ResponseEntity.ok(subscriptionService.deleteSub(id));
     }
 

@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.RequestFitDTO;
 import com.example.crossFit.model.entity.RequestFit;
 import com.example.crossFit.model.mapStruct.RequestFitMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.RequestFitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,14 +39,14 @@ public class RequestFitController {
 
     @ApiOperation("Метод для создание заявки на абонемент и тренера")
     @PostMapping("/create")
-    public ResponseEntity<String> createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {
+    public ResponseEntity<SuccessResponse> createRequestFit(@RequestBody RequestFitDTO requestFitDTO) {
         RequestFit requestFit = requestFitMapper.toRequestFit(requestFitDTO);
         return ResponseEntity.ok(requestFitService.createRequest(requestFit));
     }
 
     @ApiOperation("Метод для удаления заявки на абонемент по номеру телефона клиента")
     @DeleteMapping("/deleteRequestFit")
-    public ResponseEntity<String> deleteRequestFit(@RequestParam String phoneNumber) {
+    public ResponseEntity<SuccessResponse> deleteRequestFit(@RequestParam String phoneNumber) {
         return ResponseEntity.ok(requestFitService.deleteRequestFit(phoneNumber));
     }
 
@@ -65,19 +66,19 @@ public class RequestFitController {
 
     @ApiOperation("Метод для отклонения заявки на абонемент")
     @PatchMapping("/rejectRequestFit")
-    public ResponseEntity<String> rejectRequestFit(@RequestParam String phoneNumber) {
+    public ResponseEntity<SuccessResponse> rejectRequestFit(@RequestParam String phoneNumber) {
         return ResponseEntity.ok(requestFitService.rejectRequestFit(phoneNumber));
     }
 
     @ApiOperation("Метод для одобрения заявки на абонемент")
     @PatchMapping("/approveRequestFit")
-    public ResponseEntity<String> approveRequestFit(@RequestParam String phoneNumber) {
+    public ResponseEntity<SuccessResponse> approveRequestFit(@RequestParam String phoneNumber) {
         return ResponseEntity.ok(requestFitService.approve(phoneNumber));
     }
 
     @ApiOperation("Метод для оплаты абонемента")
     @PatchMapping("/paySub")
-    public ResponseEntity<String> subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
+    public ResponseEntity<SuccessResponse> subscriptionPayment(@RequestParam BigDecimal money, @RequestParam String email) {
         return ResponseEntity.ok(requestFitService.subscriptionPayment(money, email));
     }
 

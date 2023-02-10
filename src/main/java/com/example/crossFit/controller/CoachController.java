@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.CoachDTO;
 import com.example.crossFit.model.entity.Coach;
 import com.example.crossFit.model.mapStruct.CoachMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.CoachService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,14 +37,14 @@ public class CoachController {
 
     @ApiOperation("Метод для добавления тренера в базу")
     @PostMapping("/createCoach")
-    public ResponseEntity<String> createCoach(@RequestBody CoachDTO coachDTO) {
+    public ResponseEntity<SuccessResponse> createCoach(@RequestBody CoachDTO coachDTO) {
         Coach coach = coachMapper.toCoach(coachDTO);
         return ResponseEntity.ok(coachService.createCoach(coach));
     }
 
     @ApiOperation("Метод для удаления тренера")
     @DeleteMapping("/deleteCoach")
-    public ResponseEntity<String> deleteCoach(@RequestParam Integer id) {
+    public ResponseEntity<SuccessResponse> deleteCoach(@RequestParam Integer id) {
         return ResponseEntity.ok(coachService.deleteCoach(id));
     }
 

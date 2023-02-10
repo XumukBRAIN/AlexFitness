@@ -4,6 +4,7 @@ import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.ItemDTO;
 import com.example.crossFit.model.entity.Item;
 import com.example.crossFit.model.mapStruct.ItemMapper;
+import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.ItemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ public class ItemController {
 
     @ApiOperation("Метод для добавления товара на витрину интернет-магазина")
     @PostMapping("/createItem")
-    public ResponseEntity<String> createItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<SuccessResponse> createItem(@RequestBody ItemDTO itemDTO) {
         Item item = itemMapper.toItem(itemDTO);
         return ResponseEntity.ok(itemService.createItem(item));
     }
