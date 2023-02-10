@@ -24,9 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable(); /*.authorizeHttpRequests()
-              .antMatchers("/auth/login", "/auth/login?error", "/manager/register").permitAll()
-              .anyRequest().authenticated()
+        http.csrf().disable().authorizeHttpRequests()
+                .antMatchers("/auth/login", "/auth/login?error", "/manager/register", "/client/register")
+                .permitAll();
+              /*.anyRequest().authenticated()
               .and()
               .formLogin().loginPage("/auth/login")
               .loginProcessingUrl("/process_login")//проверяется введенные логин и пароль
