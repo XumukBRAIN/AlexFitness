@@ -83,7 +83,7 @@ public class ClientService {
         return client;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+   // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public String registerVisitor(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
