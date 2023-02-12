@@ -1,53 +1,49 @@
 package com.example.crossFit.config;
 
-import com.example.crossFit.security.AuthProviderImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.crossFit.security.JwtConfigurer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AuthProviderImpl authProvider;
+    private final JwtConfigurer jwtConfigurer;
 
-    @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
+    public SecurityConfig(JwtConfigurer jwtConfigurer) {
+        this.jwtConfigurer = jwtConfigurer;
     }
 
     @Override
-   protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeHttpRequests()
-                .antMatchers("/**")
-                .permitAll();
-              /*.anyRequest().authenticated()
-              .and()
-              .formLogin().loginPage("/auth/login")
-              .loginProcessingUrl("/process_login")//проверяется введенные логин и пароль
-              .loginProcessingUrl("/process")//переход на страницу двухфакторной аутентификации
-              .failureUrl("/auth/login")//переброс на эту страницу в случае неправильного кода из письма
-              .defaultSuccessUrl("/my_account")//пользователь авторизовался
-              .failureUrl("/auth/login?error")
-              .and()
-              .logout()
-              .logoutUrl("/logout")
-              .logoutSuccessUrl("/auth/login");*/
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/auth/login", "/auth/doubleCheck", "/client/register").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .apply(jwtConfigurer);
 
     }
 
-
+    @Bean
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authProvider);
-
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
+
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
