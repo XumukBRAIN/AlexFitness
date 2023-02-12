@@ -1,4 +1,4 @@
-package com.example.crossFit.model.dto;
+package com.example.crossFit.security;
 
 public class AuthDoubleDTO {
     private String code;

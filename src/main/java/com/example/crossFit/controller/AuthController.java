@@ -1,13 +1,10 @@
 package com.example.crossFit.controller;
 
-import com.example.crossFit.model.dto.AuthDoubleDTO;
-import com.example.crossFit.model.entity.Client;
-import com.example.crossFit.model.entity.Coach;
-import com.example.crossFit.model.entity.Manager;
 import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.CoachRepo;
 import com.example.crossFit.repository.ManagerRepo;
 import com.example.crossFit.response.SuccessResponse;
+import com.example.crossFit.security.AuthDoubleDTO;
 import com.example.crossFit.security.AuthenticationRequestDTO;
 import com.example.crossFit.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +14,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -63,26 +60,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<SuccessResponse> authenticate(@RequestBody AuthenticationRequestDTO request) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            Client client = clientRepo.findByEmail(request.getEmail());
-            Manager manager = managerRepo.findByEmail(request.getEmail());
-            Coach coach = coachRepo.findByEmail(request.getEmail());
-            String role = null;
-            if (client != null) {
-                role = client.getRole();
-            }
-            if (manager != null) {
-                role = manager.getRole();
-            }
-            if (coach != null) {
-                role = coach.getRole();
+            Authentication user = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            String token = jwtTokenProvider.createToken(request.getEmail(), user.getAuthorities().toString());
 
-            }
-
-            String token = jwtTokenProvider.createToken(request.getEmail(), role);
-            Map<Object, Object> response = new HashMap<>();
-            //response.put("email", request.getEmail());
-            //response.put("token", token);
             tokenAuth.put("email", request.getEmail());
             tokenAuth.put("token", token);
             sendMessage(request.getEmail(), subject, text);
@@ -99,7 +79,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/doubleAuthCheck")
+    @PostMapping("/doubleCheck")
     public ResponseEntity<HashMap<String, String>> doubleAuthCheck(@RequestBody AuthDoubleDTO authDoubleDTO) {
         String code = authDoubleDTO.getCode();
         if (checkCode.toString().equals(code)) {
