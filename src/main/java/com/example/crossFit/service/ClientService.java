@@ -127,12 +127,14 @@ public class ClientService {
         }
         if (client.isDoubleCheckAuth()) {
             client.setDoubleCheckAuth(false);
+            clientRepo.save(client);
 
             return new SuccessResponse("Двухфакторная проверка отключена!", HttpStatus.OK.value())
 
                     ;
         } else {
             client.setDoubleCheckAuth(true);
+            clientRepo.save(client);
 
             return new SuccessResponse("Двухфакторная проверка включена!", HttpStatus.OK.value());
         }
