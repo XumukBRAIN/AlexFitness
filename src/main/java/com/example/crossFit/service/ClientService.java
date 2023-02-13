@@ -118,6 +118,21 @@ public class ClientService {
         return new SuccessResponse("Клиент удален!", HttpStatus.OK.value());
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Transactional
+    public SuccessResponse setDoubleCheckAuth(UUID id, Boolean check) {
+        Client client = clientRepo.findById(id);
+        if (client != null) {
+            client.setDoubleCheckAuth(check);
+            clientRepo.save(client);
+
+            return new SuccessResponse("Изменения учтены", HttpStatus.OK.value());
+
+        } else {
+            throw new ResourceNotFoundException("Пользователь с таким id: " + id + "не зарегистрирован!");
+        }
+    }
+
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse payClient(String phoneNumber, BigDecimal money) {

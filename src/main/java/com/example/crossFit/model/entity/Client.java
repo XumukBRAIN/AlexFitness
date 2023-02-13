@@ -31,13 +31,16 @@ public class Client {
     private List<Orders> orders;
     @JsonIgnore
     private String role;
+    @Column(name = "double_check")
+    @JsonIgnore
+    private boolean isDoubleCheckAuth;
 
 
     public Client() {
     }
 
     public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId,
-                  List<Orders> orders, String email, BigDecimal balance, String password, String role) {
+                  List<Orders> orders, String email, BigDecimal balance, String password, String role, Boolean isDoubleCheckAuth) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
@@ -47,6 +50,7 @@ public class Client {
         this.orders = orders;
         this.password = password;
         this.role = role;
+        this.isDoubleCheckAuth = isDoubleCheckAuth;
     }
 
     public UUID getId() {
@@ -127,5 +131,13 @@ public class Client {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isDoubleCheckAuth() {
+        return isDoubleCheckAuth;
+    }
+
+    public void setDoubleCheckAuth(boolean doubleCheckAuth) {
+        isDoubleCheckAuth = doubleCheckAuth;
     }
 }
