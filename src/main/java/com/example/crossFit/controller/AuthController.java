@@ -20,7 +20,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -123,9 +126,9 @@ public class AuthController {
     }
 
     @ApiOperation("Метод для отключения двухфакторной аутентификации")
-    @GetMapping
-    public ResponseEntity<SuccessResponse> offDoubleCheckAuth(@RequestBody UUID id, Boolean check) {
-        return ResponseEntity.ok(clientService.setDoubleCheckAuth(id, check));
+    @PostMapping
+    public ResponseEntity<SuccessResponse> setDoubleCheckAuth(@RequestBody UUID id) {
+        return ResponseEntity.ok(clientService.setDoubleCheckAuth(id));
     }
 
     /**
