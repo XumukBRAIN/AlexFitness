@@ -74,7 +74,6 @@ public class ClientService {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     @Transactional(readOnly = true)
     public Client findByPhoneNumber(String phoneNumber) {
         Client client = clientRepo.findByPhoneNumber(phoneNumber);
@@ -84,6 +83,7 @@ public class ClientService {
         }
         return client;
     }
+
 
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
@@ -105,6 +105,7 @@ public class ClientService {
         return new SuccessResponse("Регистрация прошла успешно!", HttpStatus.OK.value());
     }
 
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse deleteClient(String phoneNumber) {
@@ -116,28 +117,6 @@ public class ClientService {
         clientRepo.delete(client);
 
         return new SuccessResponse("Клиент удален!", HttpStatus.OK.value());
-    }
-
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @Transactional
-    public SuccessResponse setDoubleCheckAuth(UUID id) {
-        Client client = clientRepo.findById(id);
-        if (client == null) {
-            throw new ResourceNotFoundException("Пользователь с таким id: " + id + "не зарегистрирован!");
-        }
-        if (client.isDoubleCheckAuth()) {
-            client.setDoubleCheckAuth(false);
-            clientRepo.save(client);
-
-            return new SuccessResponse("Двухфакторная проверка отключена!", HttpStatus.OK.value())
-
-                    ;
-        } else {
-            client.setDoubleCheckAuth(true);
-            clientRepo.save(client);
-
-            return new SuccessResponse("Двухфакторная проверка включена!", HttpStatus.OK.value());
-        }
     }
 
 
@@ -154,8 +133,8 @@ public class ClientService {
         clientRepo.save(client);
 
         return new SuccessResponse("Оплата прошла успешно!", HttpStatus.OK.value());
-
     }
+
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
