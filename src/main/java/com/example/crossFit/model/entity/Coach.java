@@ -15,6 +15,7 @@ public class Coach {
 
     private String name;
     private String email;
+    private String phoneNumber;
     @JsonIgnore
     private String password;
     @JsonIgnore
@@ -34,12 +35,13 @@ public class Coach {
     }
 
     public Coach(String name, List<Client> clients, List<RequestFit> requestFits,
-                 String password, String email, String role) {
+                 String password, String email, String phoneNumber, String role) {
         this.name = name;
         this.clients = clients;
         this.requestFits = requestFits;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.role = role;
     }
 
@@ -105,5 +107,13 @@ public class Coach {
 
     public void setDoubleCheckAuth(boolean doubleCheckAuth) {
         isDoubleCheckAuth = doubleCheckAuth;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

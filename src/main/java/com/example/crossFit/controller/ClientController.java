@@ -45,8 +45,8 @@ public class ClientController {
 
     @ApiOperation("Метод для добавления клиента")
     @PostMapping("/register")
-    public ResponseEntity<SuccessResponse> registerVisitor(@RequestBody ClientDTO clientDTO) {
-        return ResponseEntity.ok(clientService.registerVisitor(clientMapper.toClient(clientDTO)));
+    public ResponseEntity<SuccessResponse> register(@RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.ok(clientService.register(clientMapper.toClient(clientDTO)));
     }
 
     @ApiOperation("Метод для удаления клиента из базы данных")

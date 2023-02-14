@@ -13,6 +13,7 @@ public interface ManagerMapper {
     @Mapping(target = "managerId", source = "id")
     @Mapping(target = "managerName", source = "name")
     @Mapping(target = "managerEmail", source = "email")
+    @Mapping(target = "managerPhoneNumber", source = "phoneNumber")
     ManagerDTO toManagerDTO(Manager manager);
 
     List<ManagerDTO> toListManagerDTO(List<Manager> list);
@@ -21,6 +22,7 @@ public interface ManagerMapper {
     @Mapping(target = "name", source = "managerName")
     @Mapping(target = "password", source = "managerPassword")
     @Mapping(target = "email", source = "managerEmail")
+    @Mapping(target = "phoneNumber", source = "managerPhoneNumber")
     Manager toManager(ManagerDTO managerDTO);
 
     List<Manager> toListManager(List<ManagerDTO> list);

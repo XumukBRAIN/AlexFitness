@@ -5,12 +5,14 @@ public class ManagerDTO {
     private Integer managerId;
     private String managerName;
     private String managerEmail;
+    private String managerPhoneNumber;
     private String managerPassword;
 
-    public ManagerDTO(Integer managerId, String managerName, String managerEmail, String managerPassword) {
+    public ManagerDTO(Integer managerId, String managerName, String managerEmail, String managerPhoneNumber, String managerPassword) {
         this.managerId = managerId;
         this.managerName = managerName;
         this.managerEmail = managerEmail;
+        this.managerPhoneNumber = managerPhoneNumber;
         this.managerPassword = managerPassword;
     }
 
@@ -44,5 +46,13 @@ public class ManagerDTO {
 
     public void setManagerPassword(String managerPassword) {
         this.managerPassword = managerPassword;
+    }
+
+    public String getManagerPhoneNumber() {
+        return managerPhoneNumber;
+    }
+
+    public void setManagerPhoneNumber(String managerPhoneNumber) {
+        this.managerPhoneNumber = managerPhoneNumber;
     }
 }

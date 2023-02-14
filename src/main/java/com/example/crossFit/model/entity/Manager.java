@@ -14,6 +14,7 @@ public class Manager {
     private Integer id;
     private String name;
     private String email;
+    private String phoneNumber;
     @JsonIgnore
     private String password;
     @JsonIgnore
@@ -25,10 +26,11 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(String name, String password, String email, String role) {
+    public Manager(String name, String password, String email, String phoneNumber, String role) {
         this.name = name;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.role = role;
     }
 
@@ -78,5 +80,13 @@ public class Manager {
 
     public void setDoubleCheckAuth(boolean doubleCheckAuth) {
         isDoubleCheckAuth = doubleCheckAuth;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

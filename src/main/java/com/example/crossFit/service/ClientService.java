@@ -87,7 +87,7 @@ public class ClientService {
 
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public SuccessResponse registerVisitor(Client client) {
+    public SuccessResponse register(Client client) {
         if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
             throw new ResourceAlreadyIsRegisteredException("Клиент с таким номером телефона: "
                     + client.getPhoneNumber() + " уже зарегистрирован!");

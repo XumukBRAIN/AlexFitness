@@ -29,17 +29,17 @@ public class PeopleDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = clientRepo.findByEmail(username);
+        Client client = clientRepo.findByPhoneNumber(username);
         if (client != null) {
             return new ClientDetails(client);
         }
 
-        Manager manager = managerRepo.findByEmail(username);
+        Manager manager = managerRepo.findByPhoneNumber(username);
         if (manager != null) {
             return new ManagerDetails(manager);
         }
 
-        Coach coach = coachRepo.findByEmail(username);
+        Coach coach = coachRepo.findByPhoneNumber(username);
         if (coach != null) {
             return new CoachDetails(coach);
         } else throw new UsernameNotFoundException("Неверный логин!");

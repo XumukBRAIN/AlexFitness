@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 @Api(tags = SwaggerConfig.AUTH_TAG)
 @RestController
@@ -67,9 +66,9 @@ public class AuthController {
 
 
     @ApiOperation("Метод для отключения двухфакторной аутентификации")
-    @PostMapping
-    public ResponseEntity<SuccessResponse> setDoubleCheckAuth(@RequestBody UUID id) {
-        return ResponseEntity.ok(authService.setDoubleCheckAuth(id));
+    @PostMapping("/setDoubleCheck")
+    public ResponseEntity<SuccessResponse> setDoubleCheckAuth(@RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.ok(authService.setDoubleCheckAuth(clientDTO.getClientPhoneNumber()));
     }
 
 
