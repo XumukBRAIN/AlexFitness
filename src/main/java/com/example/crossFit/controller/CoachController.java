@@ -36,10 +36,10 @@ public class CoachController {
 
 
     @ApiOperation("Метод для добавления тренера в базу")
-    @PostMapping("/createCoach")
-    public ResponseEntity<SuccessResponse> createCoach(@RequestBody CoachDTO coachDTO) {
+    @PostMapping("/register")
+    public ResponseEntity<SuccessResponse> register(@RequestBody CoachDTO coachDTO) {
         Coach coach = coachMapper.toCoach(coachDTO);
-        return ResponseEntity.ok(coachService.createCoach(coach));
+        return ResponseEntity.ok(coachService.register(coach));
     }
 
     @ApiOperation("Метод для удаления тренера")

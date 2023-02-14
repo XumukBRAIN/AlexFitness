@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -63,16 +62,16 @@ public class AuthService {
     @Transactional
     public SuccessAuthentication authenticate(AuthenticationRequestDTO request) {
         try {
-            Authentication user = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            String token = jwtTokenProvider.createToken(request.getEmail(), user.getAuthorities().toString());
+            Authentication user = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getPhoneNumber(), request.getPassword()));
+            String token = jwtTokenProvider.createToken(request.getPhoneNumber(), user.getAuthorities().toString());
 
-            tokenAuth.put("email", request.getEmail());
+            tokenAuth.put("phoneNumber", request.getPhoneNumber());
             tokenAuth.put("token", token);
 
             if (user.getAuthorities().toString().equals("[ROLE_USER]")) {
-                Client client = clientRepo.findByEmail(request.getEmail());
+                Client client = clientRepo.findByPhoneNumber(request.getPhoneNumber());
                 if (client.isDoubleCheckAuth()) {
-                    sendMessage(request.getEmail(), subject_double_check, text_double_check);
+                    sendMessage(client.getEmail(), subject_double_check, text_double_check);
 
                     return new SuccessAuthentication(null, "Ожидается двухфакторная аутентификация",
                             HttpStatus.OK.value());
@@ -108,10 +107,10 @@ public class AuthService {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public SuccessResponse setDoubleCheckAuth(UUID id) {
-        Client client = clientRepo.findById(id);
+    public SuccessResponse setDoubleCheckAuth(String phoneNumber) {
+        Client client = clientRepo.findByPhoneNumber(phoneNumber);
         if (client == null) {
-            throw new ResourceNotFoundException("Пользователь с таким id: " + id + "не зарегистрирован!");
+            throw new ResourceNotFoundException("Пользователь с таким телефоном : " + phoneNumber + "не зарегистрирован!");
         }
         if (client.isDoubleCheckAuth()) {
             client.setDoubleCheckAuth(false);

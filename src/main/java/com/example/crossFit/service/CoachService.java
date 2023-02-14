@@ -38,11 +38,14 @@ public class CoachService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public SuccessResponse createCoach(Coach coach) {
-        Coach coach1 = coachRepo.findByEmail(coach.getEmail());
-        if (coach1 != null) {
+    public SuccessResponse register(Coach coach) {
+        if (coachRepo.findByEmail(coach.getEmail()) != null) {
             throw new ResourceAlreadyIsRegisteredException("Тренер с такой электронной почтой: "
                     + coach.getEmail() + " уже зарегистрирован!");
+        }
+        if (coachRepo.findByPhoneNumber(coach.getPhoneNumber()) != null) {
+            throw new ResourceAlreadyIsRegisteredException("Тренер с таким телефоном : "
+                    + coach.getPhoneNumber() + " уже зарегистрирован!");
         } else {
             coach.setPassword(passwordEncoder.encode(coach.getPassword()));
             coach.setRole("ROLE_COACH");

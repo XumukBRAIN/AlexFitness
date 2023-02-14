@@ -6,12 +6,14 @@ public class CoachDTO {
     private String coachName;
     private String coachPassword;
     private String coachEmail;
+    private String coachPhoneNumber;
 
-    public CoachDTO(Integer coachId, String coachName, String coachPassword, String coachEmail) {
+    public CoachDTO(Integer coachId, String coachName, String coachPassword, String coachEmail, String coachPhoneNumber) {
         this.coachId = coachId;
         this.coachName = coachName;
         this.coachPassword = coachPassword;
         this.coachEmail = coachEmail;
+        this.coachPhoneNumber = coachPhoneNumber;
     }
 
     public Integer getCoachId() {
@@ -44,5 +46,13 @@ public class CoachDTO {
 
     public void setCoachEmail(String coachEmail) {
         this.coachEmail = coachEmail;
+    }
+
+    public String getCoachPhoneNumber() {
+        return coachPhoneNumber;
+    }
+
+    public void setCoachPhoneNumber(String coachPhoneNumber) {
+        this.coachPhoneNumber = coachPhoneNumber;
     }
 }

@@ -30,7 +30,7 @@ public class ClientDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return client.getEmail();
+        return client.getPhoneNumber();
     }
 
     @Override

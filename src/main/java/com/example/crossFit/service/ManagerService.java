@@ -40,10 +40,13 @@ public class ManagerService {
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse createManager(Manager manager) {
-        Manager manager1 = managerRepo.findByEmail(manager.getEmail());
-        if (manager1 != null) {
+        if (managerRepo.findByEmail(manager.getEmail()) != null) {
             throw new ResourceAlreadyIsRegisteredException("Администратор с такой электронной почтой: "
                     + manager.getEmail() + " уже зарегистрирован!");
+        }
+        if (managerRepo.findByPhoneNumber(manager.getPhoneNumber()) != null) {
+            throw new ResourceAlreadyIsRegisteredException("Администратор с таким телефоном : "
+                    + manager.getPhoneNumber() + " уже зарегистрирован!");
         } else {
             manager.setPassword(passwordEncoder.encode(manager.getPassword()));
             manager.setRole("ROLE_ADMIN");

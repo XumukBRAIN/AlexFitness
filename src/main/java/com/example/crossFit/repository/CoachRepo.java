@@ -11,4 +11,6 @@ public interface CoachRepo extends JpaRepository<Coach, Integer> {
 
     Coach findByEmail(String email);
 
+    Coach findByPhoneNumber(String phoneNumber);
+
 }

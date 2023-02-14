@@ -30,7 +30,7 @@ public class CoachDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return coach.getEmail();
+        return coach.getPhoneNumber();
     }
 
     @Override
