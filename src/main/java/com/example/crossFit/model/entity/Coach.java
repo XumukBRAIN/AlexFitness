@@ -19,14 +19,15 @@ public class Coach {
     private String password;
     @JsonIgnore
     private String role;
-
     @JsonIgnore
     @OneToMany(mappedBy = "coach")
     private List<Client> clients;
-
     @JsonIgnore
     @OneToMany(mappedBy = "coachId")
     private List<RequestFit> requestFits;
+    @Column(name = "double_check")
+    @JsonIgnore
+    private boolean isDoubleCheckAuth;
 
 
     public Coach() {
@@ -96,5 +97,13 @@ public class Coach {
 
     public void setRequestFits(List<RequestFit> requestFits) {
         this.requestFits = requestFits;
+    }
+
+    public boolean isDoubleCheckAuth() {
+        return isDoubleCheckAuth;
+    }
+
+    public void setDoubleCheckAuth(boolean doubleCheckAuth) {
+        isDoubleCheckAuth = doubleCheckAuth;
     }
 }

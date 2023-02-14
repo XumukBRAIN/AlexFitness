@@ -1,20 +1,12 @@
 package com.example.crossFit.exceptions;
 
 public class AppError {
-    private Integer status;
     private String message;
+    private Integer httpStatus;
 
-    public AppError(Integer status, String message) {
-        this.status = status;
+    public AppError(String message, Integer httpStatus) {
         this.message = message;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+        this.httpStatus = httpStatus;
     }
 
     public String getMessage() {
@@ -23,5 +15,13 @@ public class AppError {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Integer getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(Integer httpStatus) {
+        this.httpStatus = httpStatus;
     }
 }

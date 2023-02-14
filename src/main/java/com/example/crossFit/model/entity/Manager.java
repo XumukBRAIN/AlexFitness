@@ -18,6 +18,9 @@ public class Manager {
     private String password;
     @JsonIgnore
     private String role;
+    @Column(name = "double_check")
+    @JsonIgnore
+    private boolean isDoubleCheckAuth;
 
     public Manager() {
     }
@@ -67,5 +70,13 @@ public class Manager {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isDoubleCheckAuth() {
+        return isDoubleCheckAuth;
+    }
+
+    public void setDoubleCheckAuth(boolean doubleCheckAuth) {
+        isDoubleCheckAuth = doubleCheckAuth;
     }
 }
