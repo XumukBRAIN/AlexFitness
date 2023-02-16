@@ -1,5 +1,6 @@
 package com.example.crossFit.exceptions;
 
+import com.example.crossFit.security.JwtAuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,7 +23,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationInvalidRequestException.class)
     public ResponseEntity<AppError> handleException(AuthenticationInvalidRequestException e) {
-        return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<AppError> handlerException(JwtAuthenticationException e) {
+        return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
 

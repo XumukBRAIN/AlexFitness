@@ -33,6 +33,9 @@ public class AuthService {
     private final MailSender mailSender;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${jwt.header}")
+    private String authorizationHeader;
+
     private static final String subject_double_check = "Подтверждение аутентификации";
     private static final String text_double_check = "Для подтверждения аутентификации введите данный код: ";
     private static final String subject_set_password = "Изменение пароля";
@@ -101,7 +104,9 @@ public class AuthService {
     @Transactional
     public SuccessResponse logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+        jwtTokenProvider.addToBlackListToken(request.getHeader(authorizationHeader));
         securityContextLogoutHandler.logout(request, response, null);
+
         return new SuccessResponse("Пользователь вышел. Токен аннулирован!",
                 HttpStatus.OK.value());
     }

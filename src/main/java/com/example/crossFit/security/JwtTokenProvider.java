@@ -14,9 +14,12 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashSet;
 
 @Component
 public class JwtTokenProvider {
+
+    private static HashSet<String> blackListToken = new HashSet<>();
 
     private final UserDetailsService userDetailsService;
 
@@ -52,13 +55,21 @@ public class JwtTokenProvider {
     }
 
 
+
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            if (blackListToken.contains(token)) {
+                throw new JwtAuthenticationException("Токен невалидный!");
+            }
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("Jwt token is expired or invalid", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    public void addToBlackListToken(String token) {
+        blackListToken.add(token);
     }
 
     public Authentication getAuthentication(String token) {
