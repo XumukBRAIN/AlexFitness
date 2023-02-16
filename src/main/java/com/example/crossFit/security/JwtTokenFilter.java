@@ -16,6 +16,9 @@ import java.io.IOException;
 @Component
 public class JwtTokenFilter extends GenericFilterBean {
 
+    private final static String ENCODE_UTF_8 = "UTF-8";
+    private final static String RESPONSE_INVALID_TOKEN = "{\n \"message\" : \"Токен невалидный!\" \n \"statusCode\" : \"401\" \n }";
+    private final static String CONTENT_TYPE_JSON = "application/json";
     private final JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
@@ -35,8 +38,11 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         } catch (JwtAuthenticationException e) {
             SecurityContextHolder.clearContext();
-            ((HttpServletResponse) servletResponse).sendError(e.getHttpStatus().value());
-            throw new JwtAuthenticationException("JWT token невалидный!");
+            servletResponse.setContentType(CONTENT_TYPE_JSON);
+            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            servletResponse.setCharacterEncoding(ENCODE_UTF_8);
+            servletResponse.getWriter().write(RESPONSE_INVALID_TOKEN);
+            return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
