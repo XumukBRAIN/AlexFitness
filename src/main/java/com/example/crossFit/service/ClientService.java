@@ -9,13 +9,15 @@ import com.example.crossFit.repository.ClientRepo;
 import com.example.crossFit.repository.ItemRepo;
 import com.example.crossFit.repository.OrdersRepo;
 import com.example.crossFit.response.SuccessResponse;
-import org.codehaus.plexus.util.StringUtils;
+import com.example.crossFit.security.ClientDetails;
+import org.apache.maven.surefire.shared.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,8 +36,8 @@ public class ClientService {
 
     private final ClientRepo clientRepo;
     private final OrdersRepo ordersRepo;
-    private final ItemRepo itemRepo;
     private final PasswordEncoder passwordEncoder;
+    private final ItemRepo itemRepo;
 
     private final static String SUBJECT = "Ваш заказ c номером создан!";
     private final static String TEXT = "! Благодарим за выбор нашего магазина! Вашему заказу присвоен номер: ";
@@ -56,11 +59,12 @@ public class ClientService {
     }
 
     @Autowired
-    public ClientService(ClientRepo clientRepo, OrdersRepo ordersRepo, ItemRepo itemRepo, PasswordEncoder passwordEncoder) {
+    public ClientService(ClientRepo clientRepo, OrdersRepo ordersRepo, PasswordEncoder passwordEncoder,
+                         ItemRepo itemRepo) {
         this.clientRepo = clientRepo;
         this.ordersRepo = ordersRepo;
-        this.itemRepo = itemRepo;
         this.passwordEncoder = passwordEncoder;
+        this.itemRepo = itemRepo;
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
@@ -138,49 +142,39 @@ public class ClientService {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
-    public SuccessResponse createMyOrders(String phoneNumber, Integer id, String title) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с указанным номером телефона: "
-                    + phoneNumber + " не зарегистрирован!");
+    public SuccessResponse createMyOrders(Orders orders) {
+
+        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Client client = clientDetails.getClient();
+
+        orders.setSum(BigDecimal.valueOf(0));
+
+        List<Item> items = orders.getItems();
+        for (Item item : items) {
+            Optional<Item> item1 = itemRepo.findById(item.getId());
+            orders.setSum(orders.getSum().add(item1.get().getPrice()));
         }
 
-        Optional<Item> item = itemRepo.findById(id);
-        if (!item.isPresent()) {
-            throw new ResourceNotFoundException("Товар с указанным id: " + id + " не найден в магазине!");
-        }
+        orders.setClientId(client.getId());
+        orders.setPhoneNumber(client.getPhoneNumber());
 
-        Orders o = ordersRepo.findByClientId(client.getId());
-        if (o != null) {
-            o.addItem(item.get());
-            o.setSum(o.getSum().add(item.get().getPrice()));
-        } else {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/");
+        String number;
+        try {
+            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select nextval('orders_number_seq')");
 
-            Orders orders = new Orders();
-            orders.setSum(BigDecimal.valueOf(0));
-            orders.setClientId(client.getId());
-            orders.setTitle(title);
-            orders.setPhoneNumber(phoneNumber);
-
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/");
-            String number;
-            try {
-                Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("select nextval('orders_number_seq')");
-
-                if (rs.next()) {
-                    number = dateFormat.format(new Date()) + StringUtils.leftPad(String.valueOf(rs.getLong("nextval")), 4, "0");
-                    orders.setNumber(number);
-                }
-
-                connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (rs.next()) {
+                number = dateFormat.format(new Date()) + StringUtils.leftPad(String.valueOf(rs.getLong("nextval")), 4, "0");
+                orders.setNumber(number);
             }
 
-            orders.setSum(orders.getSum().add(item.get().getPrice()));
-            orders.addItem(item.get());
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
             ordersRepo.save(orders);
 
@@ -192,10 +186,8 @@ public class ClientService {
 
             mailSender.send(mailMessage);
 
-        }
 
         return new SuccessResponse("Заказ успешно создан!", HttpStatus.OK.value());
-
     }
 }
 

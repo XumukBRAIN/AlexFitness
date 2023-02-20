@@ -42,7 +42,7 @@ public class AuthService {
     private static final String text_set_password = "Пароль был изменен! Ваш новый пароль:  ";
 
     private static final HashMap<String, String> tokenAuth = new HashMap<>();
-    private static Integer checkCode = 0;
+    private static final HashMap<String, String> doubleCheck = new HashMap();
 
     @Value("${fitness.mail.username}")
     private String mail;
@@ -74,8 +74,10 @@ public class AuthService {
             if (user.getAuthorities().toString().equals("[ROLE_USER]")) {
                 Client client = clientRepo.findByPhoneNumber(request.getPhoneNumber());
                 if (client.isDoubleCheckAuth()) {
-                    checkCode = generateSecretCode();
-                    sendMessage(client.getEmail(), subject_double_check, text_double_check + checkCode);
+                    String code = generateSecretCode().toString();
+                    doubleCheck.put(client.getPhoneNumber(), code);
+
+                    sendMessage(client.getEmail(), subject_double_check, text_double_check + code);
 
                     return new SuccessAuthentication(null, "Ожидается двухфакторная аутентификация",
                             HttpStatus.OK.value());
@@ -93,7 +95,7 @@ public class AuthService {
 
     @Transactional
     public SuccessAuthentication doubleCheck(AuthDoubleDTO authDoubleDTO) {
-        if (checkCode.toString().equals(authDoubleDTO.getCode())) {
+        if (doubleCheck.get(authDoubleDTO.getPhoneNumber()).equals(authDoubleDTO.getCode())) {
             return new SuccessAuthentication(tokenAuth, "Пользователь успешно аутентифицировался!",
                     HttpStatus.OK.value());
         } else {

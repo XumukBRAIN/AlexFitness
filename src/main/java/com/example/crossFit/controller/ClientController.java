@@ -2,8 +2,10 @@ package com.example.crossFit.controller;
 
 import com.example.crossFit.config.SwaggerConfig;
 import com.example.crossFit.model.dto.ClientDTO;
+import com.example.crossFit.model.dto.OrdersDTO;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.model.mapStruct.ClientMapper;
+import com.example.crossFit.model.mapStruct.OrdersMapper;
 import com.example.crossFit.response.SuccessResponse;
 import com.example.crossFit.service.ClientService;
 import io.swagger.annotations.Api;
@@ -23,11 +25,13 @@ public class ClientController {
 
     private final ClientService clientService;
     private final ClientMapper clientMapper;
+    private final OrdersMapper ordersMapper;
 
     @Autowired
-    public ClientController(ClientService clientService, ClientMapper clientMapper) {
+    public ClientController(ClientService clientService, ClientMapper clientMapper, OrdersMapper ordersMapper) {
         this.clientService = clientService;
         this.clientMapper = clientMapper;
+        this.ordersMapper = ordersMapper;
     }
 
     @ApiOperation("Метод для получения клиента по его айди")
@@ -62,9 +66,8 @@ public class ClientController {
     }
 
     @PostMapping("/orders/create")
-    public ResponseEntity<SuccessResponse> createOrder(@RequestParam String phoneNumber,
-                                                       @RequestParam Integer id, @RequestParam String title) {
-        return ResponseEntity.ok(clientService.createMyOrders(phoneNumber, id, title));
+    public ResponseEntity<SuccessResponse> createOrder(@RequestBody OrdersDTO ordersDTO) {
+        return ResponseEntity.ok(clientService.createMyOrders(ordersMapper.toOrders(ordersDTO)));
     }
 
 }

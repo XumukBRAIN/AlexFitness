@@ -15,6 +15,8 @@ public interface OrdersMapper {
     @Mapping(target = "ordersNumber", source = "number")
     @Mapping(target = "ordersTitle", source = "title")
     @Mapping(target = "ordersSum", source = "sum")
+    @Mapping(target = "ordersItems", source = "items")
+    @Mapping(target = "ordersPhoneNumber", source = "phoneNumber")
     OrdersDTO toOrdersDTO(Orders orders);
 
     List<OrdersDTO> toOrdersListDTO(List<Orders> orders);
@@ -23,6 +25,8 @@ public interface OrdersMapper {
     @Mapping(target = "number", source = "ordersNumber")
     @Mapping(target = "title", source = "ordersTitle")
     @Mapping(target = "sum", source = "ordersSum")
+    @Mapping(target = "items", source = "ordersItems")
+    @Mapping(target = "phoneNumber", source = "ordersPhoneNumber")
     Orders toOrders(OrdersDTO ordersDTO);
 
     List<Orders> toOrderList(List<OrdersDTO> ordersDTO);
