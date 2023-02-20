@@ -22,8 +22,8 @@ public class Item {
     public Item(Integer id, String title, List<Orders> orders, BigDecimal price) {
         this.id = id;
         this.title = title;
-        this.orders = orders;
         this.price = price;
+        this.orders = orders;
     }
 
     public Integer getId() {
