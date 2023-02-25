@@ -1,17 +1,8 @@
 package com.example.crossFit.security;
 
 public class ChangePasswordDTO {
-    private String phoneNumber;
     private String thisPassword;
     private String newPassword;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public String getThisPassword() {
         return thisPassword;

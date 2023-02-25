@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/manager")
@@ -54,6 +55,18 @@ public class ManagerController {
     @DeleteMapping("/deleteManager")
     public ResponseEntity<SuccessResponse> deleteManager(@RequestParam Integer id) {
         return ResponseEntity.ok(managerService.deleteManager(id));
+    }
+
+    @ApiOperation("Метод для выдачи бана пользователю")
+    @PostMapping("/banUser")
+    public ResponseEntity<SuccessResponse> banUser(@RequestParam UUID id, @RequestParam String typeTimeBan) {
+        return ResponseEntity.ok(managerService.banUser(id, typeTimeBan));
+    }
+
+    @ApiOperation("Метод для снятия бана с пользователя")
+    @PostMapping("/unbanUser")
+    public ResponseEntity<SuccessResponse> unbanUser(@RequestParam UUID id) {
+        return ResponseEntity.ok(managerService.unbanUser(id));
     }
 
 }

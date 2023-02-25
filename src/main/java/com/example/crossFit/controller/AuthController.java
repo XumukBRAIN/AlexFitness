@@ -60,15 +60,15 @@ public class AuthController {
     @ApiOperation("Метод для восстановления пароля")
     @PostMapping("/changePassword")
     public ResponseEntity<SuccessResponse> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        return ResponseEntity.ok(authService.changePassword(changePasswordDTO.getPhoneNumber(),
-                changePasswordDTO.getThisPassword(), changePasswordDTO.getNewPassword()));
+        return ResponseEntity.ok(authService.changePassword(changePasswordDTO.getThisPassword(),
+                changePasswordDTO.getNewPassword()));
     }
 
 
     @ApiOperation("Метод для отключения двухфакторной аутентификации")
     @PostMapping("/setDoubleCheck")
-    public ResponseEntity<SuccessResponse> setDoubleCheckAuth(@RequestBody ClientDTO clientDTO) {
-        return ResponseEntity.ok(authService.setDoubleCheckAuth(clientDTO.getClientPhoneNumber()));
+    public ResponseEntity<SuccessResponse> setDoubleCheckAuth() {
+        return ResponseEntity.ok(authService.setDoubleCheckAuth());
     }
 
 
