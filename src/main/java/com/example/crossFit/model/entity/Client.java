@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,14 +34,19 @@ public class Client {
     private String role;
     @Column(name = "double_check")
     @JsonIgnore
-    private boolean isDoubleCheckAuth;
+    private Boolean isDoubleCheckAuth;
+    @JsonIgnore
+    private Boolean accountIsLocked = false;
+    @JsonIgnore
+    private LocalDate endBanDate;
 
 
     public Client() {
     }
 
     public Client(String name, String phoneNumber, Integer coach, Integer subscriptionId,
-                  List<Orders> orders, String email, BigDecimal balance, String password, String role, Boolean isDoubleCheckAuth) {
+                  List<Orders> orders, String email, BigDecimal balance, String password, String role,
+                  Boolean isDoubleCheckAuth, Boolean accountIsLocked, LocalDate endBanDate) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.coach = coach;
@@ -51,6 +57,8 @@ public class Client {
         this.password = password;
         this.role = role;
         this.isDoubleCheckAuth = isDoubleCheckAuth;
+        this.accountIsLocked = accountIsLocked;
+        this.endBanDate = endBanDate;
     }
 
     public UUID getId() {
@@ -139,5 +147,21 @@ public class Client {
 
     public void setDoubleCheckAuth(boolean doubleCheckAuth) {
         isDoubleCheckAuth = doubleCheckAuth;
+    }
+
+    public boolean getAccountIsLocked() {
+        return accountIsLocked;
+    }
+
+    public void setAccountIsLocked(Boolean accountIsLocked) {
+        this.accountIsLocked = accountIsLocked;
+    }
+
+    public LocalDate getEndBanDate() {
+        return endBanDate;
+    }
+
+    public void setEndBanDate(LocalDate endBanDate) {
+        this.endBanDate = endBanDate;
     }
 }

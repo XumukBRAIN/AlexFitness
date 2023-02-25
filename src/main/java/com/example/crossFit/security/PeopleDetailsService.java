@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service("peopleDetailsService")
 public class PeopleDetailsService implements UserDetailsService {
 
@@ -29,19 +31,19 @@ public class PeopleDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = clientRepo.findByPhoneNumber(username);
-        if (client != null) {
-            return new ClientDetails(client);
+        Optional<Client> clientOptional = clientRepo.findByPhoneNumber(username);
+        if (clientOptional.isPresent()) {
+            return new ClientDetails(clientOptional.get());
         }
 
-        Manager manager = managerRepo.findByPhoneNumber(username);
-        if (manager != null) {
-            return new ManagerDetails(manager);
+        Optional<Manager> managerOptional = managerRepo.findByPhoneNumber(username);
+        if (managerOptional.isPresent()) {
+            return new ManagerDetails(managerOptional.get());
         }
 
-        Coach coach = coachRepo.findByPhoneNumber(username);
-        if (coach != null) {
-            return new CoachDetails(coach);
+        Optional<Coach> coachOptional = coachRepo.findByPhoneNumber(username);
+        if (coachOptional.isPresent()) {
+            return new CoachDetails(coachOptional.get());
         } else throw new UsernameNotFoundException("Неверный логин!");
 
     }

@@ -70,36 +70,33 @@ public class ClientService {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     @Transactional(readOnly = true)
     public Client getVisitor(UUID id) {
-        Client client = clientRepo.findById(id);
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с таким id: " + id + " не зарегистрирован!");
-        }
-        return client;
+        return clientRepo.findById(id)
+                .orElseThrow(new ResourceNotFoundException("Клиент с таким id: " + id +
+                        " не зарегистрирован!"));
     }
 
 
     @Transactional(readOnly = true)
     public Client findByPhoneNumber(String phoneNumber) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с таким номером телефона: "
-                    + phoneNumber + " не зарегистрирован!");
-        }
-        return client;
+        return clientRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Клиент с таким номером телефона: "
+                        + phoneNumber + " не зарегистрирован!"));
     }
 
 
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse register(Client client) {
-        if (clientRepo.findByPhoneNumber(client.getPhoneNumber()) != null) {
+
+        if (clientRepo.findByPhoneNumber(client.getPhoneNumber()).isPresent()) {
             throw new ResourceAlreadyIsRegisteredException("Клиент с таким номером телефона: "
                     + client.getPhoneNumber() + " уже зарегистрирован!");
         }
-        if (clientRepo.findByEmail(client.getEmail()) != null) {
+        if (clientRepo.findByEmail(client.getEmail()).isPresent()) {
             throw new ResourceAlreadyIsRegisteredException("Клиент с такой электронной почтой: "
                     + client.getEmail() + " уже зарегистрирован!");
         }
+
         client.setBalance(BigDecimal.valueOf(0));
         client.setRole("ROLE_USER");
         client.setPassword(passwordEncoder.encode(client.getPassword()));
@@ -113,12 +110,12 @@ public class ClientService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse deleteClient(String phoneNumber) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
+        Optional<Client> client = clientRepo.findByPhoneNumber(phoneNumber);
+        if (!client.isPresent()) {
             throw new ResourceNotFoundException("Клиент с таким номером телефона: "
                     + phoneNumber + " не зарегистрирован!");
         }
-        clientRepo.delete(client);
+        clientRepo.delete(client.get());
 
         return new SuccessResponse("Клиент удален!", HttpStatus.OK.value());
     }
@@ -127,11 +124,12 @@ public class ClientService {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse payClient(String phoneNumber, BigDecimal money) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
+        Optional<Client> clientOptional = clientRepo.findByPhoneNumber(phoneNumber);
+        if (!clientOptional.isPresent()) {
             throw new ResourceNotFoundException("Клиент с таким номером телефона: "
                     + phoneNumber + " не зарегистрирован!");
         }
+        Client client = clientOptional.get();
         client.setBalance(client.getBalance().add(money));
 
         clientRepo.save(client);
@@ -172,7 +170,7 @@ public class ClientService {
 
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Не удалось создать заказ!");
         }
 
 

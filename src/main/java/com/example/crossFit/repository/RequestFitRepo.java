@@ -5,13 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RequestFitRepo extends JpaRepository<RequestFit, Integer> {
 
     List<RequestFit> findAllByIsApprovedNull();
 
-    RequestFit findByPhoneNumber(String phoneNumber);
+    Optional<RequestFit> findByPhoneNumber(String phoneNumber);
 
     void deleteByPhoneNumber(String phoneNumber);
 

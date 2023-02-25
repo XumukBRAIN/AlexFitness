@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RequestFitService {
@@ -53,8 +54,9 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
     public SuccessResponse createRequest(RequestFit requestFit) {
-        RequestFit requestFit1 = requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber());
-        if (requestFit1 != null) {
+
+        Optional<RequestFit> requestFitOptional = requestFitRepo.findByPhoneNumber(requestFit.getPhoneNumber());
+        if (requestFitOptional.isPresent()) {
             throw new ResourceAlreadyIsRegisteredException("Заявка с указанным номером телефона "
                     + requestFit.getPhoneNumber() + " уже была зарегистрирована!");
         }
@@ -66,12 +68,9 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public RequestFit findByPhoneNumber(String phoneNumber) {
-        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
-        if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка с указанным номером телефона:" + phoneNumber
-                    + " не найдена!");
-        }
-        return requestFit;
+        return requestFitRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Заявка с указанным номером телефона: " +
+                        phoneNumber + " не найдена!"));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -96,11 +95,12 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse deleteRequestFit(String phoneNumber) {
-        if (requestFitRepo.findByPhoneNumber(phoneNumber) == null) {
-            throw new ResourceNotFoundException("Заявка с указанным номером телефона: " + phoneNumber
-                    + " не зарегистрирована!");
-        }
-        requestFitRepo.deleteByPhoneNumber(phoneNumber);
+
+        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Заявка с указанным номером телефона: " +
+                        phoneNumber + " не найдена!"));
+
+        requestFitRepo.delete(requestFit);
 
         return new SuccessResponse("Заявка удалена!", HttpStatus.OK.value());
     }
@@ -108,11 +108,10 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse rejectRequestFit(String phoneNumber) {
-        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
-        if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка с указанным номером телефона: "
-                    + phoneNumber + " не найдена!");
-        }
+        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Заявка с указанным номером телефона: "
+                        + phoneNumber + " не найдена!"));
+
         requestFit.setApproved(false);
 
         requestFitRepo.save(requestFit);
@@ -125,17 +124,13 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse approve(String phoneNumber) {
-        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber);
-        if (requestFit == null) {
-            throw new ResourceNotFoundException("Заявка с указанным номером телефона: "
-                    + phoneNumber + " не найдена!");
-        }
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
+        RequestFit requestFit = requestFitRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Клиент с указанным номером телефона: "
+                        + phoneNumber + " не зарегистрирован!"));
 
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с указанным номером телефона: "
-                    + phoneNumber + " не зарегистрирован!");
-        }
+        Client client = clientRepo.findByPhoneNumber(phoneNumber)
+                .orElseThrow(new ResourceNotFoundException("Клиент с указанным номером телефона: "
+                        + phoneNumber + " не зарегистрирован!"));
 
         requestFit.setApproved(true);
         requestFitRepo.save(requestFit);
@@ -153,11 +148,10 @@ public class RequestFitService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public SuccessResponse subscriptionPayment(BigDecimal money, String email) {
-        Client client = clientRepo.findByEmail(email);
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с указанной электронной почтой: "
-                    + email + " не зарегистрирован!");
-        }
+
+        Client client = clientRepo.findByEmail(email).orElseThrow(new ResourceNotFoundException("Клиент с указанной электронной почтой :"
+                + email + " не зарегистрирован!"));
+
         client.setBalance(client.getBalance().subtract(money));
         clientRepo.save(client);
 

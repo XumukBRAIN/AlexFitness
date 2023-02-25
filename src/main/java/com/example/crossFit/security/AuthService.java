@@ -1,6 +1,6 @@
 package com.example.crossFit.security;
 
-import com.example.crossFit.exceptions.AuthenticationInvalidRequestException;
+import com.example.crossFit.exceptions.AuthenticationInvalidException;
 import com.example.crossFit.exceptions.ResourceNotFoundException;
 import com.example.crossFit.model.entity.Client;
 import com.example.crossFit.repository.ClientRepo;
@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -68,11 +70,14 @@ public class AuthService {
             Authentication user = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getPhoneNumber(), request.getPassword()));
             String token = jwtTokenProvider.createToken(request.getPhoneNumber(), user.getAuthorities().toString());
 
-            tokenAuth.put("phoneNumber", request.getPhoneNumber());
-            tokenAuth.put("token", token);
+            tokenAuth.put(request.getPhoneNumber(), token);
 
             if (user.getAuthorities().toString().equals("[ROLE_USER]")) {
-                Client client = clientRepo.findByPhoneNumber(request.getPhoneNumber());
+                ClientDetails clientDetails = (ClientDetails) user.getPrincipal();
+                Client client = clientDetails.getClient();
+                if (client.getAccountIsLocked()) {
+                    throw new AuthenticationInvalidException("Пользователь заблокирован!");
+                }
                 if (client.isDoubleCheckAuth()) {
                     String code = generateSecretCode().toString();
                     doubleCheck.put(client.getPhoneNumber(), code);
@@ -82,24 +87,24 @@ public class AuthService {
                     return new SuccessAuthentication(null, "Ожидается двухфакторная аутентификация",
                             HttpStatus.OK.value());
                 } else {
-                    return new SuccessAuthentication(tokenAuth, "Пользователь успешно авторизовался!",
+                    return new SuccessAuthentication(tokenAuth.get(request.getPhoneNumber()), "Пользователь успешно авторизовался!",
                             HttpStatus.OK.value());
                 }
             }
         } catch (AuthenticationException e) {
-            throw new AuthenticationInvalidRequestException("Неверный логин или пароль!");
+            throw new AuthenticationInvalidException("Неверный логин или пароль!");
         }
-        return new SuccessAuthentication(tokenAuth, "Пользователь успешно авторизовался!",
+        return new SuccessAuthentication(tokenAuth.get(request.getPhoneNumber()), "Пользователь успешно авторизовался!",
                 HttpStatus.OK.value());
     }
 
     @Transactional
     public SuccessAuthentication doubleCheck(AuthDoubleDTO authDoubleDTO) {
         if (doubleCheck.get(authDoubleDTO.getPhoneNumber()).equals(authDoubleDTO.getCode())) {
-            return new SuccessAuthentication(tokenAuth, "Пользователь успешно аутентифицировался!",
+            return new SuccessAuthentication(tokenAuth.get(authDoubleDTO.getPhoneNumber()), "Пользователь успешно аутентифицировался!",
                     HttpStatus.OK.value());
         } else {
-            throw new AuthenticationInvalidRequestException("Неверный код!");
+            throw new AuthenticationInvalidException("Неверный код!");
         }
     }
 
@@ -115,11 +120,10 @@ public class AuthService {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
-    public SuccessResponse setDoubleCheckAuth(String phoneNumber) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
-            throw new ResourceNotFoundException("Пользователь с таким телефоном : " + phoneNumber + "не зарегистрирован!");
-        }
+    public SuccessResponse setDoubleCheckAuth() {
+        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Client client = clientDetails.getClient();
+
         if (client.isDoubleCheckAuth()) {
             client.setDoubleCheckAuth(false);
             clientRepo.save(client);
@@ -133,11 +137,12 @@ public class AuthService {
 
     @Transactional
     public SuccessResponse recoveryPassword(String phoneNumber) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
+        Optional<Client> clientOptional = clientRepo.findByPhoneNumber(phoneNumber);
+        if (!clientOptional.isPresent()) {
             throw new ResourceNotFoundException("Пользователь с таким номером телефона: " + phoneNumber +
                     " не зарегистрирорван!");
         }
+        Client client = clientOptional.get();
         String newPassword = generateSecretCode().toString();
         client.setPassword(passwordEncoder.encode(newPassword));
         clientRepo.save(client);
@@ -149,17 +154,15 @@ public class AuthService {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    public SuccessResponse changePassword(String phoneNumber, String thisPassword, String newPassword) {
-        Client client = clientRepo.findByPhoneNumber(phoneNumber);
-        if (client == null) {
-            throw new ResourceNotFoundException("Клиент с таким телефоном: " + phoneNumber + " не найден!");
+    public SuccessResponse changePassword(String thisPassword, String newPassword) {
+
+        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Client client = clientDetails.getClient();
+        if (passwordEncoder.matches(thisPassword, client.getPassword())) {
+            client.setPassword(passwordEncoder.encode(newPassword));
+            clientRepo.save(client);
         } else {
-            if (passwordEncoder.matches(thisPassword, client.getPassword())) {
-                client.setPassword(passwordEncoder.encode(newPassword));
-                clientRepo.save(client);
-            } else {
-                throw new AuthenticationInvalidRequestException("Неверный действующий пароль");
-            }
+            throw new AuthenticationInvalidException("Неверный действующий пароль");
         }
         return new SuccessResponse("Пароль успешно изменен!", HttpStatus.OK.value());
     }

@@ -1,24 +1,14 @@
 package com.example.crossFit.response;
 
-import java.util.HashMap;
-
 public class SuccessAuthentication {
+    private String result;
     private String message;
     private Integer status;
-    private HashMap<String, String> map;
 
-    public SuccessAuthentication(HashMap<String, String> map, String message, Integer status) {
-        this.map = map;
+    public SuccessAuthentication(String result, String message, Integer status) {
+        this.result = result;
         this.message = message;
         this.status = status;
-    }
-
-    public HashMap<String, String> getMap() {
-        return map;
-    }
-
-    public void setMap(HashMap<String, String> map) {
-        this.map = map;
     }
 
     public String getMessage() {
@@ -35,5 +25,13 @@ public class SuccessAuthentication {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

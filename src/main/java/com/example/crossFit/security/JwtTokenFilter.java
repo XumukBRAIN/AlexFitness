@@ -17,7 +17,8 @@ import java.io.IOException;
 public class JwtTokenFilter extends GenericFilterBean {
 
     private final static String ENCODE_UTF_8 = "UTF-8";
-    private final static String RESPONSE_INVALID_TOKEN = "{\n \"message\" : \"Токен невалидный!\" \n \"statusCode\" : \"401\" \n }";
+    private final static String RESPONSE_INVALID_JSON = "{\n \"message\" : ";
+    private final static String RESPONSE_INVALID = "\n \"statusCode\" : \"401\" \n }";
     private final static String CONTENT_TYPE_JSON = "application/json";
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -34,6 +35,13 @@ public class JwtTokenFilter extends GenericFilterBean {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    if (authentication.getAuthorities().toString().equals("[ROLE_USER]")) {
+                        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext()
+                                .getAuthentication().getPrincipal();
+                        if (clientDetails.getClient().getAccountIsLocked()) {
+                            throw new JwtAuthenticationException("Пользователь заблокирован!");
+                        }
+                    }
                 }
             }
         } catch (JwtAuthenticationException e) {
@@ -41,9 +49,12 @@ public class JwtTokenFilter extends GenericFilterBean {
             servletResponse.setContentType(CONTENT_TYPE_JSON);
             ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             servletResponse.setCharacterEncoding(ENCODE_UTF_8);
-            servletResponse.getWriter().write(RESPONSE_INVALID_TOKEN);
+            servletResponse.getWriter().write(RESPONSE_INVALID_JSON + e.getMessage() + "," + RESPONSE_INVALID);
+
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
+
+
 }

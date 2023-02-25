@@ -21,14 +21,19 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(AuthenticationInvalidRequestException.class)
-    public ResponseEntity<AppError> handleException(AuthenticationInvalidRequestException e) {
+    @ExceptionHandler(AuthenticationInvalidException.class)
+    public ResponseEntity<AppError> handleException(AuthenticationInvalidException e) {
         return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(JwtAuthenticationException.class)
     public ResponseEntity<AppError> handlerException(JwtAuthenticationException e) {
         return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ClientAlreadyIsBlockedException.class)
+    public ResponseEntity<AppError> handleException(ClientAlreadyIsBlockedException e) {
+        return new ResponseEntity<>(new AppError(e.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
 
