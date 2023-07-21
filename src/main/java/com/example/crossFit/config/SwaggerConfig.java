@@ -25,6 +25,7 @@ public class SwaggerConfig {
     public static final String ORDERS_TAG = "Контроллер для заказов интернет-магазина";
     public static final String ITEM_TAG = "Контроллер для товаров для интернет-магазина";
     public static final String AUTH_TAG = "Контроллер для аутентификации и авторизации";
+    public static final String TURN_TAG = "Контроллер для работы с услугами зала";
 
     @Bean
     public Docket api() {
